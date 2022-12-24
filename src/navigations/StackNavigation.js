@@ -14,6 +14,7 @@ import Login from "../components/CustomerAndDriver/Login";
 import Verify from "../components/CustomerAndDriver/Verify";
 import MyBookingsDriver from "../components/Driver/MyBookingsDriver"
 import DrawerNavigation from "./CustomerNavigator/DrawerNavigation";
+import ContextHelper from "../ContextHooks/ContextHelper";
 
 
 // global stack veriable
@@ -21,14 +22,17 @@ const Stack = createStackNavigator();
 //---------- main app / component
 
 export const StackNavigation = () => {
+
     //---------- state, veriable, context and hooks
-    // const { loading } = ContextHelper();
+
+    const { loading } = ContextHelper();
 
     //---------- return main view   
+
     return (
         <>
             {/* Global Loader */}
-            {/* {
+            {
                 loading &&
                 <View
                     style={{
@@ -44,7 +48,7 @@ export const StackNavigation = () => {
                 >
                     <ActivityIndicator size={'large'} color={'#000'} />
                 </View>
-            } */}
+            }
             <Stack.Navigator initialRouteName="SplashScreen">
                 <Stack.Screen
                     options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}

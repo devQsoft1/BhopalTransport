@@ -2,7 +2,7 @@
 
 // react
 import React, { useEffect, useState, createContext } from "react";
-import { StyleSheet, ScrollView, View, Text, useColorScheme } from "react-native";
+import { StyleSheet, ScrollView, View, Text, useColorScheme, Keyboard } from "react-native";
 
 // third party lib
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -32,36 +32,26 @@ const GlobalContextProvide = (props) => {
     const [appStateArray, setAppStateArray] = useState([])
     const [currentUser, setCurrentUser] = useState({})
     const [loading, setLoading] = useState(false);
+    const [keyboardStatus, setKeyboardStatus] = React.useState(undefined);
 
     //---------- life cycle
 
-    useEffect(() => {
-        const setup = async () => {
-            const current_theme = await getDataFromAsyncStorage('current_theme');
-            // const current_user = await getDataFromAsyncStorage('current_user');
-
-            if (current_theme) {
-
-                setIsDarkTheme(current_theme?.isDarkTheme)
-                setTheme({
-                    backgroundColor: current_theme?.backgroundColor,
-                    color: current_theme?.color
-                })
-            }
 
 
-        }
-        setup()
+
+    React.useEffect(() => {
+        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+            setKeyboardStatus("Keyboard Shown");
+        });
+        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+            setKeyboardStatus("Keyboard Hidden");
+        });
+
         return () => {
-            // this now gets called when the component unmounts
+            showSubscription.remove();
+            hideSubscription.remove();
         };
     }, []);
-
-    useEffect(() => {
-
-        console.log('---- is dark theme ----', isDarkTheme)
-    }, [isDarkTheme])
-
 
     //---------------------------------- Axios Api cal ----------------------------------------//
     const postData = ({
@@ -71,18 +61,25 @@ const GlobalContextProvide = (props) => {
         if (!loading || is_force_request) {
 
             setLoading(true);
-            console.log("(>>>>>>>>>>>>>>>>>>>>>>>)", data);
+
+            console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
+            console.log("POST DATA TO SERVER(>>>>>>>>> >>>>>>>>>>>>>>)", data);
+            console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
+
             postFormDataToServer({
                 currentUser, data, key, end_point, call_back: postDataCallBack
             })
         }
     }
     const postDataCallBack = (response) => {
+
         // veriable
         let key = response.key
         let data
 
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
         console.log('-=-=-= call back after server response -----')
+        console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
 
         // success
         if (response.status === 'success') {
@@ -90,11 +87,11 @@ const GlobalContextProvide = (props) => {
             if (key === 'login_pocket') {
 
                 // check patron or business owner for success response from server and check from local give by : roleselectionscreen
-                if ((currentUser?.user_type === 'business_owner' &&
+                if ((currentUser?.user_type === 'driver' &&
                     response?.response?.role === '1' ||
                     response?.response?.role === 1) ||
 
-                    (currentUser?.user_type === 'patron' &&
+                    (currentUser?.user_type === 'customer' &&
                         response?.response?.role === '0' ||
                         response?.response?.role === 0)) {
 
@@ -130,7 +127,7 @@ const GlobalContextProvide = (props) => {
 
             // show error
             showMessage({
-                message: errors[key],
+                message: response.error,
                 type: 'danger',
             });
 
@@ -138,12 +135,6 @@ const GlobalContextProvide = (props) => {
 
         storeDataInAppState({ key, data })
     }
-
-
-
-
-
-
 
     //------------------------------------- change theme --------------------------------------//
 
@@ -202,7 +193,7 @@ const GlobalContextProvide = (props) => {
         if (data?.response?.TOKEN) {
             if (key === 'signup_pocket' || key === 'login_pocket' || key === "Business_signup_pocket") {
 
-                let user_type = (data.response.role === '0' || data.response.role === 0) ? 'patron' :
+                let user_type = (data.response.role === '0' || data.response.role === 0) ? 'customer' :
 
                     (data.response.role === '1' || data.response.role === 1) ? 'business_owner' : 'none'
 

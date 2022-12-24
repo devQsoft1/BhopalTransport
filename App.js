@@ -7,7 +7,10 @@
  */
 import 'react-native-gesture-handler';
 import React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
+
+// lib
+import FlashMessage from 'react-native-flash-message';
 
 // navigations
 import { NavigationContainer } from "@react-navigation/native";
@@ -30,6 +33,9 @@ const App = () => {
             NavigationService.setTopLevelNavigator(navigatorRef);
           }}>
           <StackNavigation />
+
+          <FlashMessage position="top" />
+
         </NavigationContainer>
       </GlobalContextProvide>
     </SafeAreaView>

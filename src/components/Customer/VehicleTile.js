@@ -12,14 +12,14 @@ import { Pick_up } from "../../constants/Images";
 
 
 
-const VehicleTile = ({ navigation, icon, title, status }) => {
+const VehicleTile = ({ navigation, icon, title, status, description }) => {
     return (
         <View style={styles.flexBox}>
 
             <View style={styles.borderImage}>
 
                 <Image
-                    source={icon}
+                    source={{ uri: icon }}
                     style={{ height: 47, width: 69, }}
                 />
             </View>

@@ -1,23 +1,46 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from "react-native";
 import { _fontName } from "../../assets/fonts/font";
 import CustomButton from "../../common/CustomButton";
 import CustomText from "../../common/CustomText";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 // common
 import HeaderFirst from "../../common/HeaderFirst";
 import COLORS from "../../constants/Colors";
 import { App_Logo, Arrow_Roght_icon, Edit_Icon, Profile_image, TandC_icon, Truck_icon } from "../../constants/Images";
+import ContextHelper from "../../ContextHooks/ContextHelper";
 import NavigationService from "../../navigations/NavigationService";
 import MyBookingsDriver from "../Driver/MyBookingsDriver"
-// common
 
 
 
 const CustomDrawer = ({ navigation }) => {
 
+    //---------- state, veriable, context and hooks
+    const {
+        isDarkTheme,
+        theme,
+        appStateObject,
+        appStateArray,
+        currentUser,
+
+        setLoading,
+        postData,
+        changeTheme,
+        storeDataInAppState,
+        removeDataFromAppState,
+        storeDataInAsyncStorage,
+        getDataFromAsyncStorage,
+        removeDataFromAsyncStorage,
+        removeAllDataFromAppState,
+        setCurrentUser,
+    } = ContextHelper()
+
+    //---------- handle user's action
+
     const HandelNavigation = (name) => {
-        console.log(name);
+
         if (name === "My Profile") {
             navigation.navigate("EditProfile")
         }
@@ -29,6 +52,41 @@ const CustomDrawer = ({ navigation }) => {
         }
 
     }
+
+
+    const handleLogout = () => {
+
+        Alert.alert("Warning!", "Are you sure you want to logout.", [
+            {
+                text: "CANCEL",
+                onPress: () => {
+                    null
+                },
+                style: "cancel"
+            },
+            {
+                text: "LOGOUT", onPress: async () => {
+
+                    setLoading(true)
+
+                    // logout 
+                    await removeDataFromAsyncStorage('current_user')
+                    await setCurrentUser({})
+                    await removeAllDataFromAppState()
+                    navigation.replace('SplashScreen')
+
+                    showMessage({
+                        message: 'You are successfully logout from account!  Now you can login again new account!',
+                        style: { backgroundColor: '#42AEEC' }
+                    });
+                    setLoading(false)
+                }
+            }
+        ]);
+    }
+
+    //---------- main view
+
     return (
         <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 60 }}>
             <View style={{ ...styles.flexRow }}>
@@ -77,7 +135,11 @@ const CustomDrawer = ({ navigation }) => {
 
 
             <CustomButton
-                onPress={() => { navigation.navigate('RoleSelection') }}
+                onPress={() => {
+
+                    handleLogout()
+                    // navigation.navigate('RoleSelection') 
+                }}
                 title={'Logout'}
                 backgroundColor={COLORS.WHITE}
                 color={COLORS.DARKGRAY}

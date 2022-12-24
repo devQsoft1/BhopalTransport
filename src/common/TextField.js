@@ -24,7 +24,7 @@ export default function TextField({ props,
         style={styles.inputBox}
         placeholder={placeholder}
         placeholderTextColor={'#949292'} //ffffff96
-        onChangeText={(text) => { props?.onChangeText && props?.onChangeText(text) }}
+        onChangeText={(text) => { onChangeText && onChangeText(text) }}
         maxLength={maxLength}
       />
     </View>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'https://techramindra.com/mohit/appservice/process'
+const BASE_URL = 'https://techramindra.com/bhopaltransport/appservice/process'
 
 export const getDataFromServer = async () => {
 
@@ -30,7 +30,9 @@ export const getDataFromServerWithGivenParams = async ({ data, end_point }) => {
 
 
 export const postFormDataToServer = async ({ currentUser, data, key, end_point, call_back }) => {
-    console.log("Data :::::::::::::::::", data);
+
+    console.log("Data axios.js :::::::::::::::::", data);
+
     // create form data 
     var form_data = new FormData();
 
@@ -62,9 +64,9 @@ export const postFormDataToServer = async ({ currentUser, data, key, end_point, 
         // success
         .then(function (response) {
 
-            console.log('                                     ')
+            console.log('                                           ')
             console.log(`api resposense for  key : ${key}, end point : ${end_point}  `, response.data)
-            console.log('                                     ')
+            console.log('                                               ')
 
             // success
             if (response?.data?.result) {
@@ -79,9 +81,9 @@ export const postFormDataToServer = async ({ currentUser, data, key, end_point, 
             } else {
 
 
-                console.log('                                     ')
+                console.log('                                         ')
                 console.log(` error :==> api resposense for  key : ${key}, end point : ${end_point}  `, response.data)
-                console.log('                                     ')
+                console.log('                                          ')
 
 
                 call_back({
@@ -99,7 +101,7 @@ export const postFormDataToServer = async ({ currentUser, data, key, end_point, 
 
             call_back({
                 status: 'error',
-                error,
+                error: error.toString(),
                 key
             })
         });

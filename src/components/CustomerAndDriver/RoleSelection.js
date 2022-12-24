@@ -26,7 +26,7 @@ const RoleSelection = ({ navigation }) => {
         setCurrentUser,
     } = ContextHelper()
 
-    console.log("=-=-", currentUser);
+    console.log("=-currentUser AT ROLE SELECTION =-", currentUser);
 
     return (
         <View style={{ flex: 1 }} >

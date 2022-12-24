@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, View, Dimensions } from "react-native";
 
 // common
 import { _fontName } from "../../assets/fonts/font";
@@ -28,10 +28,18 @@ const Details = ({ navigation, route }) => {
 
                     <View>
 
-                        <Image
-                            source={item?.icon}
-                            style={{ alignSelf: "center" }}
-                        />
+                        <View
+                            style={{
+                                height: 200,
+                                width: _windowSize.width - 40,
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Image
+                                source={{ uri: item?.path + item?.image }}
+                                style={{ height: '100%', width: '100%' }}
+                            />
+                        </View>
 
                         <CustomText
                             text={item?.name}
@@ -43,7 +51,7 @@ const Details = ({ navigation, route }) => {
                         />
 
                         <CustomText
-                            text={"Lorem ipsum dolor sit amet. Ut corporis aperiam non error quod ab esse distinctio qui consequuntur eaque. Rem consectetur harum in delectus accusamus et enim aliquid sit nostrum voluptas et officiis cumque. Ea minus autem qui accusamus assumenda qui molestiae quos vel atque totam? Eum facilis omnis et dolore unde ut perspiciatis voluptatibus vel esse voluptatem."}
+                            text={item?.description}
                             style={{
                                 color: '#949292',
                                 fontSize: 15,

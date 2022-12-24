@@ -1,24 +1,50 @@
+//---------- imports
+
+// react
 import * as React from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+    FlatList,
+    Image,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
+
+// assets
 import { _fontName } from "../../assets/fonts/font";
+
+// common
 import CustomText from "../../common/CustomText";
 import Header from "../../common/Header";
-import { E_V, Menu_Icon, Pick_up, Tata_ace, Tenker, Threee } from "../../constants/Images";
+
+// constants
+import {
+    E_V,
+    Menu_Icon,
+    Pick_up,
+    Tata_ace,
+    Tenker,
+    Threee
+} from "../../constants/Images";
+
+// components
 import VehicleTile from "./VehicleTile";
 
-// common
-// common
+//---------- main component
 
+const CustomerHome = ({ navigation, data }) => {
 
+    //---------- main view
 
-const CustomerHome = ({ navigation }) => {
     return (
         <>
             <Header
                 leftIcon={Menu_Icon}
             />
 
-            <View style={{ marginHorizontal: 20, flex: 1 }}>
+            <View
+                style={{ marginHorizontal: 20, flex: 1 }}
+            >
                 <FlatList
                     style={{ flex: 1, paddingTop: 57 }}
                     data={data}
@@ -26,17 +52,20 @@ const CustomerHome = ({ navigation }) => {
                     ListFooterComponent={() => <View style={{ height: 20 }} />}
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => <View style={{ height: 35 }} />}
-                    renderItem={({ item, indx }) =>
-                        <TouchableOpacity onPress={() => navigation.navigate('Details', { item })}>
-
+                    renderItem={({ item, index }) =>
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => navigation.navigate('Details', { item })}
+                        >
                             <VehicleTile
-                                icon={item?.icon}
-                                title={item.name}
+                                icon={item?.path + item?.image}
+                                title={item?.name}
+                                description={item?.description}
                             />
                         </TouchableOpacity>
 
-                    } />
-
+                    }
+                />
             </View>
         </>
     )
@@ -44,7 +73,7 @@ const CustomerHome = ({ navigation }) => {
 
 export default CustomerHome;
 
-const data = [
+const data1 = [
     {
         id: 0,
         name: "Bolero Pik-Up",

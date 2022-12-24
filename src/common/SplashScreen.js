@@ -5,54 +5,60 @@ import React, { useEffect, useState } from "react";
 import { View, Image, SafeAreaView, StyleSheet } from 'react-native'
 
 // context 
+import ContextHelper from "../ContextHooks/ContextHelper";
 
 // style and image
 import COLORS from "../constants/Colors";
 import { App_Logo } from "../constants/Images";
+
+
 //---------- main component
 
 function SplashScreen({ navigation }) {
 
     //---------- context and state
 
-    // const [isSetupDone, setIssetupDone] = useState(false)
-    // const {
-    //     isDarkTheme,
-    //     theme,
-    //     appStateObject,
-    //     appStateArray,
-    //     currentUser,
+    const [isSetupDone, setIsSetupDone] = useState(false)
+    const {
+        isDarkTheme,
+        theme,
+        appStateObject,
+        appStateArray,
+        currentUser,
 
-    //     postData,
-    //     changeTheme,
-    //     storeDataInAppState,
-    //     removeDataFromAppState,
-    //     storeDataInAsyncStorage,
-    //     getDataFromAsyncStorage,
-    //     setCurrentUser,
-    // } = ContextHelper()
+        postData,
+        changeTheme,
+        storeDataInAppState,
+        removeDataFromAppState,
+        storeDataInAsyncStorage,
+        getDataFromAsyncStorage,
+        removeDataFromAsyncStorage,
+        setCurrentUser,
+    } = ContextHelper()
 
 
     useEffect(() => {
 
-        // const setup = async () => {
-        //     // const current_user = await getDataFromAsyncStorage('current_user');
+        const setup = async () => {
+            // await removeDataFromAsyncStorage('current_user');
 
-        //     if (current_user) {
+            const current_user = await getDataFromAsyncStorage('current_user');
 
-        //         setCurrentUser(current_user)
-        //     } else {
+            if (current_user) {
 
-        //         setCurrentUser({
-        //             user_type: 'none'
-        //         })
-        //     }
-        // }
-        // setup()
+                setCurrentUser(current_user)
+            } else {
+
+                setCurrentUser({
+                    user_type: 'none'
+                })
+            }
+        }
+        setup()
 
 
         setTimeout(() => {
-            navigation.replace("RoleSelection")
+            setIsSetupDone(true)
         }, 3000);
 
         return () => {
@@ -60,19 +66,18 @@ function SplashScreen({ navigation }) {
         };
     }, []);
 
-    // useEffect(() => {
+    useEffect(() => {
 
-    //     if (currentUser?.user_type && isSetupDone) {
+        if (currentUser?.user_type !== 'none' && isSetupDone) {
 
-    //         navigateHelper()
-    //     }
-    // }, [currentUser, isSetupDone])
+            navigation.replace("DrawerNavigation")
+        } else if (currentUser?.user_type === 'none' && isSetupDone) {
 
-    // const navigateHelper = () => {
+            navigation.replace("RoleSelection")
+        }
+    }, [currentUser, isSetupDone])
 
-    //     // console.log('-------------------currentUser------, currentUser', currentUser)
-
-    // }
+    //---------- main view
 
     return (
         <View

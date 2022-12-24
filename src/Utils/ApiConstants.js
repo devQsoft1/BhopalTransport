@@ -12,6 +12,8 @@ export const api_end_point_constants = {
     //------------------------------------------------------- my 
 
     login: "login",
+    verify_otp: "verify_otp",
+    show_vehicle: "show_bars",
     sign_up: "signup",
     show_bar_details: "show_bar_details",
     show_bars: "show_bars",
