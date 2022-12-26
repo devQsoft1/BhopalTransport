@@ -15,6 +15,7 @@ import EditProfile from "../../components/Customer/EditProfile";
 import MyBooking from "../../components/Customer/MyBooking";
 import TermsAndConditions from "../../common/TermsAndConditions";
 import Home from "../../components/CustomerAndDriver/Home";
+import EditProfileDriver from "../../components/Driver/EditProfileDriver";
 
 // drawer
 // import CustomDrawer from '../../scenes/MeenuScreen/CustomDrawer'
@@ -57,7 +58,7 @@ const DrawerStack = () => {
             initialRouteName="Home"
         >
             <Stack.Screen
-                options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
+                options={{ headerShown: false, cardStyle: { backgroundColor: "#F5F5F5" } }}
                 name="Home"
                 component={Home} />
 
@@ -87,6 +88,10 @@ const DrawerStack = () => {
                 name="TermsAndConditions"
                 component={TermsAndConditions} />
 
+            <Stack.Screen
+                options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
+                name="EditProfileDriver"
+                component={EditProfileDriver} />
 
         </Stack.Navigator>
     )

@@ -58,9 +58,9 @@ const data = [
     }, {
         id: 1,
         name: "Vishal Sen",
-        status1: "Accept",
+        status1: "Running",
         status2: "Reject",
-        status3: "Location"
+        // status3: "Location"
     }, {
         id: 2,
         name: "Jivan Singh",
@@ -83,15 +83,15 @@ const data = [
     {
         id: 5,
         name: "Jugal Solanki",
-        status1: "Accept",
-        status2: "Reject",
+        status1: "Running",
+        // status2: "Reject",
         status3: "Location"
     },
     {
         id: 6,
         name: "Nitin Pawar",
-        status1: "Accept",
-        status2: "Reject",
+        status1: "Running",
+        // status2: "Reject",
         status3: "Location"
     },
     {

@@ -3,8 +3,20 @@ package com.bhopaltransport;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import com.react.SmsPackage;
+import com.tkporter.sendsms.SendSMSPackage;
 
 public class MainActivity extends ReactActivity {
+
+
+        // @Override
+        // public void onActivityResult(int requestCode, int resultCode, Intent data)
+        // {
+        //   super.onActivityResult(requestCode, resultCode, data);
+        //   //probably some other stuff here
+        //   SendSMSPackage.getInstance().onActivityResult(requestCode, resultCode, data);
+        // }
+
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule

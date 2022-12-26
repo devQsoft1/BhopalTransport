@@ -73,27 +73,3 @@ const CustomerHome = ({ navigation, data }) => {
 
 export default CustomerHome;
 
-const data1 = [
-    {
-        id: 0,
-        name: "Bolero Pik-Up",
-        icon: Pick_up
-    }, {
-        id: 1,
-        name: "Ev Vehicle",
-        icon: E_V
-    }, {
-        id: 2,
-        name: "Water Tanker",
-        icon: Tenker
-    }, {
-        id: 3,
-        name: "Three Vehicle Auto",
-        icon: Threee
-    }, {
-        id: 4,
-        name: "Tata ace ",
-        icon: Tata_ace
-    },
-
-]

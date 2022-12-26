@@ -45,7 +45,7 @@ const Login = ({ navigation }) => {
 
 
     const [data, setData] = React.useState({
-        mobile: "",
+        mobile: "78945645468",
     })
 
     //---------- life cycles

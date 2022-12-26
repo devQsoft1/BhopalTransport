@@ -7,6 +7,7 @@ import { StyleSheet, ScrollView, View, Text, useColorScheme, Keyboard } from "re
 // third party lib
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import Geolocation from '@react-native-community/geolocation';
 
 // api call
 import { postDataToServer, postFormDataToServer } from '../Utils/Axios'
@@ -31,15 +32,18 @@ const GlobalContextProvide = (props) => {
     const [appStateObject, setAppStateObject] = useState({})
     const [appStateArray, setAppStateArray] = useState([])
     const [currentUser, setCurrentUser] = useState({})
+
+    const [currentLocation, setCurrentLocation] = useState({});
+
     const [loading, setLoading] = useState(false);
     const [keyboardStatus, setKeyboardStatus] = React.useState(undefined);
 
     //---------- life cycle
 
-
-
-
     React.useEffect(() => {
+
+        Geolocation.getCurrentPosition(info => setCurrentLocation(info));
+
         const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
             setKeyboardStatus("Keyboard Shown");
         });
@@ -272,6 +276,7 @@ const GlobalContextProvide = (props) => {
                 appStateObject,
                 appStateArray,
                 currentUser,
+                currentLocation,
 
                 setLoading,
                 postData,

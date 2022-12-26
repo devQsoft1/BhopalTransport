@@ -16,7 +16,6 @@ import { Pick_up } from "../../constants/Images";
 const Details = ({ navigation, route }) => {
 
     const { item } = route.params;
-
     return (
         <View style={{ flex: 1 }}>
             <Header

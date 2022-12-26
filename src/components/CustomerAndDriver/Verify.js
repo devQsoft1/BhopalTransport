@@ -2,13 +2,20 @@
 
 // react
 import * as React from "react";
-import { Image, ScrollView, Text, View } from "react-native";
+import { Image, ScrollView, Text, View, DeviceEventEmitter, NativeModules } from "react-native";
 
 // lib
 import { showMessage, hideMessage } from "react-native-flash-message";
+import { useIsFocused } from "@react-navigation/native";
 
 // assets
 import { _fontName } from "../../assets/fonts/font";
+import {
+    getHash,
+    startOtpListener,
+    useOtpVerify,
+} from 'react-native-otp-verify';
+import SmsAndroid from 'react-native-get-sms-android';
 
 // common
 import CustomButton from "../../common/CustomButton";
@@ -29,6 +36,7 @@ import ContextHelper from "../../ContextHooks/ContextHelper";
 const Verify = ({ navigation, route }) => {
 
     //---------- state, veriable, context and hooks
+    const isFocused = useIsFocused();
 
     const { mobile } = route.params;
 
@@ -51,7 +59,55 @@ const Verify = ({ navigation, route }) => {
         setCurrentUser,
     } = ContextHelper()
 
+
+    var filter = {
+        box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
+        // minDate: 1671058800, // timestamp (in milliseconds since UNIX epoch)
+        // maxDate: 1672058961, // timestamp (in milliseconds since UNIX epoch)
+        read: 0, // 0 for unread SMS, 1 for SMS already read
+        // thread_id: 12, // specify the conversation thread_id
+        // address: '+1888------', // sender's phone number
+        // body: 'How are you', // content to match
+        indexFrom: 0, // start from index 0
+        maxCount: 1, // count of SMS to return each time
+    };
+
     //---------- life cycles
+
+    // using methods
+    React.useEffect(() => {
+
+
+        SmsAndroid.list(
+            JSON.stringify(filter),
+            (fail) => {
+                console.log('Failed with this error: ' + fail);
+            },
+            (count, smsList) => {
+                console.log('Count: ', count);
+                console.log('List: ', smsList);
+                var arr = JSON.parse(smsList);
+
+                arr.forEach(function (object) {
+                    console.log('Object: ' + object);
+                    console.log('-->' + object.date);
+                    console.log('-->' + object.body);
+                });
+            },
+        );
+
+
+        // SmsAndroid.addSmsListener(event => {
+        //     console.log('event=--=-', event);
+        // });
+
+        DeviceEventEmitter.addListener('sms', (msg) => {
+            console.log('------------------------->',)
+            console.log(msg);
+        });
+
+
+    }, []);
 
 
     React.useEffect(() => {
@@ -94,10 +150,8 @@ const Verify = ({ navigation, route }) => {
         <ScrollView
             style={{ flex: 1 }}
         >
-
             <HeaderFirst
                 navigation={navigation}
-
             />
 
             <View
@@ -125,14 +179,12 @@ const Verify = ({ navigation, route }) => {
                 <TextField
                     keyboardType={'numeric'}
                     placeholder='Enter 4 Digit OTP'
-                    //   maxLength={10}
-
+                    maxLength={4}
+                    autoComplete="sms-otp"
                     onChangeText={(text) => {
-
                         setOtp(text)
                     }}
                 />
-
 
                 <CustomButton
                     onPress={() => {

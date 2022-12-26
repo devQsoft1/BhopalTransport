@@ -18,6 +18,7 @@ const ContextHelper = () => {
         appStateObject,
         appStateArray,
         currentUser,
+        currentLocation,
 
         setLoading,
         postData,
@@ -40,6 +41,7 @@ const ContextHelper = () => {
         appStateObject,
         appStateArray,
         currentUser,
+        currentLocation,
 
         setLoading,
         postData,

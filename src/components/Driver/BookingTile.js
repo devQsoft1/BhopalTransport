@@ -41,11 +41,11 @@ const DriverTile = ({ navigation, icon, title, status }) => {
             <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", width: "65%" }}>
                 <TouchableOpacity
                     style={{
-                        backgroundColor: "green",
+                        backgroundColor: status === 'Rejected' ? COLORS.DARKGRAY : "#21A300",
                         justifyContent: 'center',
                         alignItems: 'center',
-                        width: 90,
-                        height: 25,
+                        width: 80,
+                        height: 28,
 
                         shadowOffset: { width: 2, height: 2 },
                         shadowOpacity: 1,

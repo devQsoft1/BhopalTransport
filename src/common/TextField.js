@@ -7,7 +7,7 @@ import COLORS from '../constants/Colors'
 
 
 export default function TextField({ props,
-  label, editable = true, placeholder, labelStyle = {}, style = {}, inputBoxStyle = {}, keyboardType, placeholderTextColor, value, onChangeText, maxLength, textRef
+  label, editable = true, placeholder, labelStyle = {}, style = {}, inputBoxStyle = {}, keyboardType, autoComplete, value, onChangeText, maxLength, textRef
 }) {
   let [isFocused, setIsFocused] = React.useState()
 
@@ -26,6 +26,7 @@ export default function TextField({ props,
         placeholderTextColor={'#949292'} //ffffff96
         onChangeText={(text) => { onChangeText && onChangeText(text) }}
         maxLength={maxLength}
+        autoComplete={autoComplete ? autoComplete : 'off'}
       />
     </View>
   )

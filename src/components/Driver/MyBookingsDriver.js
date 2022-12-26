@@ -56,7 +56,7 @@ const data = [
     }, {
         id: 1,
         name: "Vishal Sen",
-        status: "Completed"
+        status: "Rejected"
     }, {
         id: 2,
         name: "Jivan Singh",
@@ -64,7 +64,7 @@ const data = [
     }, {
         id: 3,
         name: "Sonu Thakur",
-        status: "Completed"
+        status: "Rejected"
     }, {
         id: 4,
         name: "Harry Verma",
@@ -73,12 +73,12 @@ const data = [
     {
         id: 5,
         name: "Jugal Solanki",
-        status: "Completed"
+        status: "Rejected"
     },
     {
         id: 6,
         name: "Nitin Pawar",
-        status: "Completed"
+        status: "Rejected"
 
     },
     {

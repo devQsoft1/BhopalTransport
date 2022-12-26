@@ -18,40 +18,34 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3 }) => {
     return (
         <View style={styles.flexBox}>
 
-
-            <View style={{ width: 110 }}>
+            <View style={{ width: "32%" }}>
 
                 <CustomText
                     text="Name"
-                    style={{ fontSize: 8 }}
+                    style={{
+                        fontSize: 8
+                    }}
+                    font={_fontName.InterBold_700}
+
                 />
                 <CustomText
                     text={title}
                     style={{
                         color: COLORS.DARKGRAY,
                         fontSize: 14,
-                        textAlign: "left",
+                        // textAlign: "left",
                     }}
                     font={_fontName.InterBold_700}
                 />
 
 
             </View >
+            <View style={{ flexDirection: "row", justifyContent: "flex-start", flex: 1, width: "68%" }}>
 
-            <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "65%" }}>
                 <TouchableOpacity
                     style={{
+                        ...styles.tile,
                         backgroundColor: COLORS.DARKGRAY,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: 55,
-                        height: 25,
-
-                        shadowOffset: { width: 2, height: 2 },
-                        shadowOpacity: 1,
-                        shadowRadius: 16,
-                        elevation: 6,
-                        borderRadius: 10
                     }}
                 >
 
@@ -64,33 +58,40 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3 }) => {
                         }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                    style={styles.tile}
-                >
+                {
+                    status2 &&
 
-                    <CustomText
-                        text={status2}
+                    <TouchableOpacity
+                        style={styles.tile}
+                    >
 
-                        style={{
-                            color: "black",
-                            fontSize: 12
-                        }} />
-                </TouchableOpacity>
+                        <CustomText
+                            text={status2}
 
-                <TouchableOpacity
-                    style={styles.tile}
-                >
+                            style={{
+                                color: "black",
+                                fontSize: 12
+                            }} />
+                    </TouchableOpacity>
+                }
 
-                    <CustomText
-                        text={status3}
+                {
+                    status3 &&
+                    <TouchableOpacity
+                        style={styles.tile}
+                    >
+                        <CustomText
+                            text={status3}
 
-                        style={{
-                            color: "black",
-                            fontSize: 12
-                        }} />
-                </TouchableOpacity>
+                            style={{
+                                color: "black",
+                                fontSize: 12
+                            }} />
+                    </TouchableOpacity>
+                }
 
             </View>
+
         </View>
     )
 }
@@ -103,17 +104,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         height: 71,
-        paddingHorizontal: 21,
+        paddingHorizontal: 18,
         backgroundColor: "#fff",
+        width: "100%",
         borderRadius: 20,
-        marginHorizontal: 2,
-        marginTop: 2,
-        //backgroundColor: "red",
-        // justifyContent: "space-between",
 
-        shadowOffset: { width: 1, height: 1 },
-        shadowOpacity: 0.9,
-        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 20,
         elevation: 6,
 
     },
@@ -122,8 +120,9 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.WHITE,
         justifyContent: 'center',
         alignItems: 'center',
-        width: 55,
-        height: 25,
+        width: 60,
+        height: 28,
+        marginLeft: 5,
 
 
         shadowOffset: { width: 2, height: 2 },

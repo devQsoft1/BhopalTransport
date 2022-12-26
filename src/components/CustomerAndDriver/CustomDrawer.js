@@ -36,16 +36,18 @@ const CustomDrawer = ({ navigation }) => {
         removeAllDataFromAppState,
         setCurrentUser,
     } = ContextHelper()
-
     //---------- handle user's action
-
     const HandelNavigation = (name) => {
 
         if (name === "My Profile") {
-            navigation.navigate("EditProfile")
+            !currentUser?.user_type === "customer" ?
+                navigation.navigate("EditProfile") :
+                navigation.navigate("EditProfileDriver")
         }
         else if (name === "My Booking") {
-            navigation.navigate("MyBookingsDriver")
+            currentUser?.user_type === "customer" ?
+                navigation.navigate("MyBooking") :
+                navigation.navigate("MyBookingsDriver")
         }
         else if (name === "Terms And Conditions") {
             navigation.navigate("TermsAndConditions")
@@ -115,8 +117,9 @@ const CustomDrawer = ({ navigation }) => {
                 data.map((item) =>
 
                     <TouchableOpacity
+                        key={item?.id}
                         onPress={() => HandelNavigation(item?.name)}
-                        style={{ ...styles.flexRow2, marginBottom: 15 }} key={item?.id}>
+                        style={{ ...styles.flexRow2, marginBottom: 15 }} >
                         <Image
                             source={item?.icon}
                         />
