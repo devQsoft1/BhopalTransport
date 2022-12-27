@@ -13,6 +13,7 @@ import GoogleMaps from "../../common/GoogleMaps";
 import COLORS from "../../constants/Colors";
 import EditProfile from "../../components/Customer/EditProfile";
 import MyBooking from "../../components/Customer/MyBooking";
+import MyBookingsDriver from "../../components/Driver/MyBookingsDriver"
 import TermsAndConditions from "../../common/TermsAndConditions";
 import Home from "../../components/CustomerAndDriver/Home";
 import EditProfileDriver from "../../components/Driver/EditProfileDriver";
@@ -42,11 +43,11 @@ const DrawerNavigation = () => {
                 options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
                 name="HomeDrawer"
                 component={DrawerStack} />
-        </Drawer.Navigator >
+        </Drawer.Navigator>
 
     )
 }
-EditProfile
+
 export default DrawerNavigation;
 
 const Stack = createStackNavigator();
@@ -92,6 +93,11 @@ const DrawerStack = () => {
                 options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
                 name="EditProfileDriver"
                 component={EditProfileDriver} />
+
+            <Stack.Screen
+                options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
+                name="MyBookingsDriver"
+                component={MyBookingsDriver} />
 
         </Stack.Navigator>
     )

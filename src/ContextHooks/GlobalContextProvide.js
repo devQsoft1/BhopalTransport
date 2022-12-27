@@ -294,7 +294,7 @@ const GlobalContextProvide = (props) => {
             {
                 props.children
             }
-        </AppContext.Provider >
+        </AppContext.Provider>
 
     );
 };

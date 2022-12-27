@@ -20,6 +20,7 @@ import COLORS from "../../constants/Colors";
 // utils
 import { api_end_point_constants } from "../../Utils/ApiConstants";
 import ContextHelper from "../../ContextHooks/ContextHelper";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 //---------- login component
 
@@ -43,6 +44,7 @@ const Login = ({ navigation }) => {
         setCurrentUser,
     } = ContextHelper()
 
+    const [flagCheck, setFlag] = React.useState(false)
 
     const [data, setData] = React.useState({
         mobile: "78945645468",
@@ -149,10 +151,40 @@ const Login = ({ navigation }) => {
                 <View
                     style={{ flexDirection: "row", marginVertical: 21 }}
                 >
-                    <Image
+                    {/* <Image
                         source={TermsIcon}
                         resizeMode='contain'
-                    />
+                    /> */}
+
+                    <TouchableOpacity onPress={() => { setFlag(!flagCheck) }}>
+
+
+                        {!flagCheck &&
+                            <TouchableOpacity style={{
+                                borderWidth: 2,
+                                borderColor: "COLORS.DARKGRAY",
+                                width: 21,
+                                height: 21,
+                                borderRadius: 3,
+                                marginRight: 3,
+                                marginBottom: 3
+                            }}
+
+                                onPress={() => { setFlag(!flagCheck) }}
+                            >
+                                {/* {console.warn(flagCheck)} */}
+
+                            </TouchableOpacity>
+                        }
+                        {flagCheck &&
+                            <Image
+                                source={TermsIcon}
+                                resizeMode='contain'
+                            />
+                        }
+
+                        {/* {console.warn(flagCheck)} */}
+                    </TouchableOpacity>
 
                     <CustomText
                         text="Accept Terms And Conditions"
@@ -170,7 +202,7 @@ const Login = ({ navigation }) => {
                 />
             </View>
 
-        </ScrollView >
+        </ScrollView>
     )
 }
 

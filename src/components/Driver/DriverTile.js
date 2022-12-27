@@ -39,7 +39,7 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3 }) => {
                 />
 
 
-            </View >
+            </View>
             <View style={{ flexDirection: "row", justifyContent: "flex-start", flex: 1, width: "68%" }}>
 
                 <TouchableOpacity

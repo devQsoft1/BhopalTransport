@@ -46,7 +46,7 @@ const CustomDrawer = ({ navigation }) => {
         }
         else if (name === "My Booking") {
             currentUser?.user_type === "customer" ?
-                navigation.navigate("MyBooking") :
+                navigation.navigate("MyBookingsDriver") :
                 navigation.navigate("MyBookingsDriver")
         }
         else if (name === "Terms And Conditions") {
