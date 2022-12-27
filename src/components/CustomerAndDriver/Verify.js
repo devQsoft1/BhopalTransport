@@ -2,7 +2,7 @@
 
 // react
 import * as React from "react";
-import { Image, ScrollView, Text, View, DeviceEventEmitter, NativeModules } from "react-native";
+import { Image, ScrollView, Text, View, DeviceEventEmitter, EventEmitter, AppState } from "react-native";
 
 // lib
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -14,6 +14,7 @@ import {
     getHash,
     startOtpListener,
     useOtpVerify,
+    removeListener
 } from 'react-native-otp-verify';
 import SmsAndroid from 'react-native-get-sms-android';
 
@@ -58,7 +59,9 @@ const Verify = ({ navigation, route }) => {
         getDataFromAsyncStorage,
         setCurrentUser,
     } = ContextHelper()
-
+    console.log('AppState============================================');
+    console.log('AppState===', AppState);
+    console.log('AppState========================================');
 
     var filter = {
         box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
@@ -72,11 +75,40 @@ const Verify = ({ navigation, route }) => {
         maxCount: 1, // count of SMS to return each time
     };
 
-    //---------- life cycles
+    // // using methods
 
-    // using methods
     React.useEffect(() => {
 
+        console.log('start hash =-==->>>>>>>>>>>');
+
+        getHash().then(hash => {
+            // use this hash in the message.
+            console.log('=-=-==-hash-=-', hash);
+
+        }).catch(console.log);
+
+        startOtpListener(message => {
+            console.log('=-=-==-=-=--')
+            console.log('=-=-==-=-=--message', message)
+
+            getOtp()
+            // extract the otp using regex e.g. the below regex extracts 4 digit otp from message
+            const otp = /(\d{4})/g.exec(message)[1];
+            // setOtp(otp);
+            console.log('=-=-==-=-=--otp', otp);
+
+        });
+        // AppState?.removeListener();
+        return () => removeListener();
+    }, []);
+
+    //---------- life cycles
+
+
+    // // using methods
+
+
+    const getOtp = () => {
 
         SmsAndroid.list(
             JSON.stringify(filter),
@@ -95,19 +127,20 @@ const Verify = ({ navigation, route }) => {
                 });
             },
         );
+    }
 
 
-        // SmsAndroid.addSmsListener(event => {
-        //     console.log('event=--=-', event);
-        // });
+    // SmsAndroid.addSmsListener(event => {
+    //     console.log('event=--=-', event);
+    // });
 
-        DeviceEventEmitter.addListener('sms', (msg) => {
-            console.log('------------------------->',)
-            console.log(msg);
-        });
+    // DeviceEventEmitter.addListener('sms', (msg) => {
+    //     console.log('------------------------->',)
+    //     console.log(msg);
+    // });
 
 
-    }, []);
+
 
 
     React.useEffect(() => {
@@ -177,6 +210,7 @@ const Verify = ({ navigation, route }) => {
                 />
 
                 <TextField
+                    value={otp}
                     keyboardType={'numeric'}
                     placeholder='Enter 4 Digit OTP'
                     maxLength={4}

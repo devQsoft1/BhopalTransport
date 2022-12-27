@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Text, View } from "react-native";
+import { AppState, Text, View } from "react-native";
 import { _fontName } from "../../assets/fonts/font";
 import CustomButton from "../../common/CustomButton";
 
@@ -34,7 +34,7 @@ const RoleSelection = ({ navigation }) => {
             <HeaderFirst
                 isBack={false}
             />
-            <View style={{ justifyContent: "center", flex: 1, marginHorizontal: 33 }}>
+            <View style={{ justifyContent: "center", flex: 1, marginHorizontal: 45 }}>
 
                 <CustomText
                     text="Ea quia velit qui exercitationem autem a modi"
