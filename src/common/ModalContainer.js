@@ -133,22 +133,22 @@ function ModalContainer({ navigation, render_view_key, content, isVisible, hideM
             transparent={true}
             visible={isVisible}
             onRequestClose={() => {
-                hideModal ? hideModal()
-                    :
-                    navigation.goBack()
-                setVisible(false)
+                // hideModal ? hideModal()
+                //     :
+                //     navigation.goBack()
+                // setVisible(false)
             }}
 
         >
 
             <TouchableOpacity
                 onPress={() => {
-                    hideModal ? hideModal()
-                        :
+                    // hideModal ? hideModal()
+                    //     :
 
 
-                        navigation.goBack()
-
+                    //     navigation.goBack()
+                    navigation.navigate('Home')
                     setVisible(false)
                 }}
                 activeOpacity={1}

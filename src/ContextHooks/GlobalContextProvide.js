@@ -42,8 +42,6 @@ const GlobalContextProvide = (props) => {
 
     React.useEffect(() => {
 
-        Geolocation.getCurrentPosition(info => setCurrentLocation(info));
-
         const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
             setKeyboardStatus("Keyboard Shown");
         });
@@ -51,11 +49,17 @@ const GlobalContextProvide = (props) => {
             setKeyboardStatus("Keyboard Hidden");
         });
 
+        getCurrentLocation()
         return () => {
             showSubscription.remove();
             hideSubscription.remove();
         };
     }, []);
+
+    const getCurrentLocation = async () => {
+
+        await Geolocation.getCurrentPosition(info => setCurrentLocation(info));
+    }
 
     //---------------------------------- Axios Api cal ----------------------------------------//
     const postData = ({
@@ -78,7 +82,7 @@ const GlobalContextProvide = (props) => {
     const postDataCallBack = (response) => {
 
         // veriable
-        let key = response.key
+        let key = response?.key
         let data
 
         console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
@@ -114,9 +118,10 @@ const GlobalContextProvide = (props) => {
                     });
                 }
             } else {
-
+                console.log("callback Responce -=-=-=-=-=--", response);
                 data = {
-                    response: response.response
+                    response: response?.response,
+                    status: response?.status
                 }
 
             }
@@ -124,14 +129,14 @@ const GlobalContextProvide = (props) => {
         } else {
 
             data = {
-                error: response.error
+                error: response?.error
             }
 
             setLoading(false);
 
             // show error
             showMessage({
-                message: response.error,
+                message: response?.error?.toString() || 'server error',
                 type: 'danger',
             });
 

@@ -88,7 +88,7 @@ export const postFormDataToServer = async ({ currentUser, data, key, end_point, 
 
                 call_back({
                     status: 'error',
-                    error: response?.data,
+                    error: response?.data?.message,
                     key
                 })
             }

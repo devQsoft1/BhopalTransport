@@ -49,7 +49,7 @@ const CustomerHome = ({ navigation, data }) => {
                     style={{ flex: 1, paddingTop: 57 }}
                     data={data}
                     keyExtractor={item => item.id}
-                    ListFooterComponent={() => <View style={{ height: 20 }} />}
+                    ListFooterComponent={() => <View style={{ height: 80 }} />}
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => <View style={{ height: 35 }} />}
                     renderItem={({ item, index }) =>

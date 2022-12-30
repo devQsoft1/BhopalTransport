@@ -15,6 +15,7 @@ import Verify from "../components/CustomerAndDriver/Verify";
 import MyBookingsDriver from "../components/Driver/MyBookingsDriver"
 import DrawerNavigation from "./CustomerNavigator/DrawerNavigation";
 import ContextHelper from "../ContextHooks/ContextHelper";
+import TermsAndConditions from "../common/TermsAndConditions";
 
 
 // global stack veriable
@@ -81,6 +82,11 @@ export const StackNavigation = () => {
                     name="DrawerNavigation"
                     component={DrawerNavigation} />
 
+
+                <Stack.Screen
+                    options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
+                    name="TermsAndConditions"
+                    component={TermsAndConditions} />
 
             </Stack.Navigator>
         </>

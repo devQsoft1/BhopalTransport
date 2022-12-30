@@ -8,10 +8,11 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 // common
 import HeaderFirst from "../../common/HeaderFirst";
 import COLORS from "../../constants/Colors";
-import { App_Logo, Arrow_Roght_icon, Edit_Icon, Profile_image, TandC_icon, Truck_icon } from "../../constants/Images";
+import { App_Logo, Arrow_Roght_icon, delete_user, Edit_Icon, Profile_image, TandC_icon, Truck_icon } from "../../constants/Images";
 import ContextHelper from "../../ContextHooks/ContextHelper";
 import NavigationService from "../../navigations/NavigationService";
 import MyBookingsDriver from "../Driver/MyBookingsDriver"
+import { api_end_point_constants } from "../../Utils/ApiConstants";
 
 
 
@@ -36,26 +37,77 @@ const CustomDrawer = ({ navigation }) => {
         removeAllDataFromAppState,
         setCurrentUser,
     } = ContextHelper()
+
+
+
+    React.useEffect(() => {
+        // success
+        if (appStateObject?.delete_account_pocket?.status === 'success') {
+
+
+            navigation.replace('SplashScreen')
+            showMessage({
+                message: 'You are successfully Delete from account!  Now you can login again new account!',
+                style: { backgroundColor: '#42AEEC' }
+            });
+            setLoading(false)
+            removeDataFromAsyncStorage('current_user')
+            setCurrentUser({})
+            removeAllDataFromAppState()
+        }
+    }, [appStateObject?.delete_account_pocket])
+
     //---------- handle user's action
     const HandelNavigation = (name) => {
 
         if (name === "My Profile") {
-            !currentUser?.user_type === "customer" ?
+            currentUser?.user_type === "customer" ?
                 navigation.navigate("EditProfile") :
                 navigation.navigate("EditProfileDriver")
         }
         else if (name === "My Booking") {
             currentUser?.user_type === "customer" ?
-                navigation.navigate("MyBookingsDriver") :
+                navigation.navigate("MyBooking") :
                 navigation.navigate("MyBookingsDriver")
         }
         else if (name === "Terms And Conditions") {
             navigation.navigate("TermsAndConditions")
         }
+        else if (name === "Delete Account") {
+            // navigation.navigate("TermsAndConditions")
+            handleAccountDelete()
+        }
 
     }
 
+    const handleAccountDelete = () => {
 
+        Alert.alert("Warning!", "Are you sure you want to Delete Account.", [
+            {
+                text: "CANCEL",
+                onPress: () => {
+                    null
+                },
+                style: "cancel"
+            },
+            {
+                text: "DELETE", onPress: () => {
+
+                    setLoading(true)
+                    postData({
+                        key: 'delete_account_pocket',
+                        end_point: api_end_point_constants.delete_account,
+                        data: {
+                            userID: currentUser.userID,
+                        }
+                    })
+                    // logout 
+
+                }
+            }
+        ]);
+
+    }
     const handleLogout = () => {
 
         Alert.alert("Warning!", "Are you sure you want to logout.", [
@@ -121,7 +173,14 @@ const CustomDrawer = ({ navigation }) => {
                         onPress={() => HandelNavigation(item?.name)}
                         style={{ ...styles.flexRow2, marginBottom: 15 }} >
                         <Image
+                            resizeMode="cover"
+
                             source={item?.icon}
+                            style={{
+                                height: 20,
+                                width: 20,
+                                tintColor: "#fff"
+                            }}
                         />
                         <CustomText
                             text={item?.name}
@@ -198,5 +257,10 @@ const data = [
         id: 3,
         name: "Terms And Conditions",
         icon: TandC_icon
+    },
+    {
+        id: 4,
+        name: "Delete Account",
+        icon: delete_user
     },
 ]

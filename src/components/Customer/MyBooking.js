@@ -6,6 +6,8 @@ import { _fontName } from "../../assets/fonts/font";
 import CustomText from "../../common/CustomText";
 import Header from "../../common/Header";
 import { E_V, Menu_Icon, Pick_up, Tata_ace, Tenker, Threee } from "../../constants/Images";
+import ContextHelper from "../../ContextHooks/ContextHelper";
+import { api_end_point_constants } from "../../Utils/ApiConstants";
 import VehicleTile from "./VehicleTile";
 
 // common
@@ -14,6 +16,53 @@ import VehicleTile from "./VehicleTile";
 
 
 const MyBooking = ({ navigation }) => {
+    //---------- state, veriable, context and hooks
+    const [bookingData, setBookingData] = React.useState([])
+
+    const {
+        setLoading,
+        appStateObject,
+        currentUser,
+
+        postData,
+        storeDataInAppState,
+        removeDataFromAppState,
+        storeDataInAsyncStorage,
+        getDataFromAsyncStorage,
+        setCurrentUser,
+    } = ContextHelper()
+
+
+    //---------- life cycles
+
+    React.useEffect(() => {
+
+        getHomeDataFromServer()
+    }, [])
+
+    React.useEffect(() => {
+
+        // success
+        if (appStateObject?.customer_booking_data_pocket?.response) {
+
+            setLoading(false)
+            setBookingData(appStateObject?.customer_booking_data_pocket?.response)
+        }
+    }, [appStateObject?.customer_booking_data_pocket])
+
+
+
+    const getHomeDataFromServer = () => {
+
+        postData({
+            key: 'customer_booking_data_pocket',
+            end_point: api_end_point_constants.show_vehicle,
+            data: {
+                userID: currentUser.userID,
+            }
+        })
+    }
+    console.log('========bookingData', bookingData);
     return (
         <>
             <Header
@@ -24,7 +73,7 @@ const MyBooking = ({ navigation }) => {
             <View style={{ marginHorizontal: 20, flex: 1 }}>
                 <FlatList
                     style={{ flex: 1, paddingTop: 57 }}
-                    data={data}
+                    data={bookingData.filter((item) => item?.booking_status === true)}
                     keyExtractor={item => item.id}
                     ListFooterComponent={() => <View style={{ height: 20 }} />}
                     showsVerticalScrollIndicator={false}
@@ -33,9 +82,9 @@ const MyBooking = ({ navigation }) => {
                         <TouchableOpacity onPress={() => navigation.navigate('Details', { item })}>
 
                             <VehicleTile
-                                icon={item?.icon}
+                                icon={item?.path + item?.image}
                                 title={item.name}
-                                status={item?.status}
+                                status={'running'}
                             />
                         </TouchableOpacity>
 

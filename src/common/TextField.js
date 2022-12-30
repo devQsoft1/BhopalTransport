@@ -6,7 +6,7 @@ import COLORS from '../constants/Colors'
 
 
 
-export default function TextField({ props,
+export default function TextField({ props, onFocus, onBlur,
   label, editable = true, placeholder, labelStyle = {}, style = {}, inputBoxStyle = {}, keyboardType, autoComplete, value, onChangeText, maxLength, textRef
 }) {
   let [isFocused, setIsFocused] = React.useState()
@@ -19,8 +19,14 @@ export default function TextField({ props,
         keyboardType={keyboardType ? keyboardType : "default"}
         ref={textRef}
         value={value}
-        onBlur={() => setIsFocused(false)}
-        onFocus={() => setIsFocused(true)}
+        onBlur={() => {
+          setIsFocused(false)
+          onBlur && onBlur()
+        }}
+        onFocus={() => {
+          setIsFocused(true)
+          onFocus && onFocus()
+        }}
         style={styles.inputBox}
         placeholder={placeholder}
         placeholderTextColor={'#949292'} //ffffff96

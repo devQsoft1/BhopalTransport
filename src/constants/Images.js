@@ -18,6 +18,7 @@ module.exports = {
   TandC_icon: require("../assets/images/TandC_icon.png"),
   Edit_Icon: require("../assets/images/Edit_Icon.png"),
   Truck_icon: require("../assets/images/Truck_icon.png"),
-
-
+  delete_user: require("../assets/images/delete_user.png"),
+  GoogleMarker: require("../assets/images/GoogleMarker.gif"),
+  MarkerGoogle: require("../assets/images/MarkerGoogle.png"),
 };

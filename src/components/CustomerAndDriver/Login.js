@@ -47,9 +47,9 @@ const Login = ({ navigation }) => {
     const [flagCheck, setFlag] = React.useState(false)
 
     const [data, setData] = React.useState({
-        mobile: "78945645468",
+        mobile: "",
     })
-
+    console.log('=-=-=-=-=', currentUser?.user_type);
     //---------- life cycles
 
     React.useEffect(() => {
@@ -59,20 +59,6 @@ const Login = ({ navigation }) => {
             setLoading(false)
 
             navigation.navigate('Verify', { mobile: data.mobile })
-
-            // if ((currentUser?.user_type === 'business_owner' &&
-            //     appStateObject?.login_pocket?.response?.role === '1' ||
-            //     appStateObject?.login_pocket?.response?.role === 1) ||
-
-            //     (currentUser?.user_type === 'patron' &&
-            //         appStateObject?.login_pocket?.response?.role === '0' ||
-            //         appStateObject?.login_pocket?.response?.role === 0)) {
-
-            //     currentUser?.user_type === 'business_owner' ?
-            //         navigation.navigate('OwnerOnboarding')
-            //         :
-            //         navigation.navigate('PatronOnboarding')
-            // }
         }
     }, [appStateObject?.login_pocket])
 
@@ -80,6 +66,15 @@ const Login = ({ navigation }) => {
 
     const handleLogin = () => {
 
+        if (!flagCheck) {
+
+            // show error
+            showMessage({
+                message: 'Please accept terms and conditoins!',
+                type: 'danger',
+            });
+            return
+        }
         if (data?.mobile) {
 
             postData({
@@ -87,6 +82,7 @@ const Login = ({ navigation }) => {
                 end_point: api_end_point_constants.login,
                 data: {
                     ...data,
+                    // rol: currentUser?.user_type === 'customer' ? 0 : 1
                 }
             })
         } else {
@@ -156,48 +152,74 @@ const Login = ({ navigation }) => {
                         resizeMode='contain'
                     /> */}
 
-                    <TouchableOpacity onPress={() => { setFlag(!flagCheck) }}>
+                    <TouchableOpacity
+                        style={{
+                            height: 22,
 
 
-                        {!flagCheck &&
-                            <TouchableOpacity style={{
-                                borderWidth: 2,
-                                borderColor: "COLORS.DARKGRAY",
-                                width: 21,
-                                height: 21,
-                                borderRadius: 3,
-                                marginRight: 3,
-                                marginBottom: 3
-                            }}
+                        }}
+                        onPress={() => { setFlag(!flagCheck) }}
+                    >
 
-                                onPress={() => { setFlag(!flagCheck) }}
-                            >
-                                {/* {console.warn(flagCheck)} */}
+                        {
+                            flagCheck ?
+                                <Image
+                                    source={TermsIcon}
+                                    resizeMode='contain'
+                                />
+                                :
+                                <TouchableOpacity style={{
+                                    borderWidth: 2,
+                                    borderColor: "COLORS.DARKGRAY",
+                                    width: 21,
+                                    height: 21,
+                                    borderRadius: 3,
+                                    marginRight: 3,
+                                    // marginBottom: 3
+                                }}
 
-                            </TouchableOpacity>
-                        }
-                        {flagCheck &&
-                            <Image
-                                source={TermsIcon}
-                                resizeMode='contain'
-                            />
+                                    onPress={() => { setFlag(!flagCheck) }}
+                                >
+                                    {/* {console.warn(flagCheck)} */}
+
+                                </TouchableOpacity>
                         }
 
                         {/* {console.warn(flagCheck)} */}
                     </TouchableOpacity>
 
                     <CustomText
-                        text="Accept Terms And Conditions"
+                        text="Accept"
                         style={{
                             fontSize: 15,
-                            marginLeft: 6,
+                            marginHorizontal: 6,
                         }}
                     />
+                    <TouchableOpacity
+
+                        style={{
+                            borderBottomColor: '#000',
+                            borderBottomWidth: 1,
+                        }}
+                        onPress={() => {
+                            navigation.navigate('TermsAndConditions')
+                        }}
+                    >
+
+                        <CustomText
+                            text="Terms And Conditions"
+                            style={{
+                                fontSize: 15,
+                            }}
+                        />
+                    </TouchableOpacity>
 
                 </View>
 
                 <CustomButton
-                    onPress={() => { handleLogin() }}
+                    onPress={() => {
+                        handleLogin()
+                    }}
                     title={'Login'}
                 />
             </View>

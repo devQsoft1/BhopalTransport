@@ -45,24 +45,32 @@ const RoleSelection = ({ navigation }) => {
                     }}
                     font={_fontName.InterRegular_400}
                 />
-                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <>
-                        <CustomButton
-                            onPress={() => {
-                                setCurrentUser({
-                                    user_type: 'customer'
-                                })
-                                navigation.navigate('Login')
-                            }}
-                            title={'Customer'}
-                            width={140}
-                        />
-                    </>
+                <View
+                    style={{ flexDirection: "row", justifyContent: "space-between" }}
+                >
 
                     <CustomButton
-                        onPress={() => { }}
+                        onPress={() => {
+                            setCurrentUser({
+                                user_type: 'customer'
+                            })
+                            navigation.navigate('Login')
+                        }}
+                        title={'Customer'}
+                        width={'49%'}
+                        fontSize={22}
+                    />
+
+                    <CustomButton
+                        onPress={() => {
+                            setCurrentUser({
+                                user_type: 'driver'
+                            })
+                            navigation.navigate('Login')
+                        }}
                         title={'Driver'}
-                        width={140}
+                        width={'49%'}
+                        fontSize={22}
                     />
                 </View>
             </View>

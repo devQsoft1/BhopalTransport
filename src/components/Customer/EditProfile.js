@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 
 // common
 import { _fontName } from "../../assets/fonts/font";

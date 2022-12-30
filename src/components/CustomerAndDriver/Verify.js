@@ -10,13 +10,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 // assets
 import { _fontName } from "../../assets/fonts/font";
-import {
-    getHash,
-    startOtpListener,
-    useOtpVerify,
-    removeListener
-} from 'react-native-otp-verify';
-import SmsAndroid from 'react-native-get-sms-android';
+
 
 // common
 import CustomButton from "../../common/CustomButton";
@@ -59,75 +53,73 @@ const Verify = ({ navigation, route }) => {
         getDataFromAsyncStorage,
         setCurrentUser,
     } = ContextHelper()
-    console.log('AppState============================================');
-    console.log('AppState===', AppState);
-    console.log('AppState========================================');
-
-    var filter = {
-        box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
-        // minDate: 1671058800, // timestamp (in milliseconds since UNIX epoch)
-        // maxDate: 1672058961, // timestamp (in milliseconds since UNIX epoch)
-        read: 0, // 0 for unread SMS, 1 for SMS already read
-        // thread_id: 12, // specify the conversation thread_id
-        // address: '+1888------', // sender's phone number
-        // body: 'How are you', // content to match
-        indexFrom: 0, // start from index 0
-        maxCount: 1, // count of SMS to return each time
-    };
-
-    // // using methods
-
-    React.useEffect(() => {
-
-        console.log('start hash =-==->>>>>>>>>>>');
-
-        getHash().then(hash => {
-            // use this hash in the message.
-            console.log('=-=-==-hash-=-', hash);
-
-        }).catch(console.log);
-
-        startOtpListener(message => {
-            console.log('=-=-==-=-=--')
-            console.log('=-=-==-=-=--message', message)
-
-            getOtp()
-            // extract the otp using regex e.g. the below regex extracts 4 digit otp from message
-            const otp = /(\d{4})/g.exec(message)[1];
-            // setOtp(otp);
-            console.log('=-=-==-=-=--otp', otp);
-
-        });
-        // AppState?.removeListener();
-        return () => removeListener();
-    }, []);
-
-    //---------- life cycles
 
 
-    // // using methods
+    // var filter = {
+    //     box: 'inbox', // 'inbox' (default), 'sent', 'draft', 'outbox', 'failed', 'queued', and '' for all
+    //     // minDate: 1671058800, // timestamp (in milliseconds since UNIX epoch)
+    //     // maxDate: 1672058961, // timestamp (in milliseconds since UNIX epoch)
+    //     read: 0, // 0 for unread SMS, 1 for SMS already read
+    //     // thread_id: 12, // specify the conversation thread_id
+    //     // address: '+1888------', // sender's phone number
+    //     // body: 'How are you', // content to match
+    //     indexFrom: 0, // start from index 0
+    //     maxCount: 1, // count of SMS to return each time
+    // };
+
+    // // // using methods
+
+    // React.useEffect(() => {
+
+    //     console.log('start hash =-==->>>>>>>>>>>');
+
+    //     getHash().then(hash => {
+    //         // use this hash in the message.
+    //         console.log('=-=-==-hash-=-', hash);
+
+    //     }).catch(console.log);
+
+    //     startOtpListener(message => {
+    //         console.log('=-=-==-=-=--')
+    //         console.log('=-=-==-=-=--message', message)
+
+    //         getOtp()
+    //         // extract the otp using regex e.g. the below regex extracts 4 digit otp from message
+    //         const otp = /(\d{4})/g.exec(message)[1];
+    //         // setOtp(otp);
+    //         console.log('=-=-==-=-=--otp', otp);
+
+    //     });
+    //     // AppState?.removeListener();
+    //     return () => removeListener();
+    // }, []);
+
+    // //---------- life cycles
 
 
-    const getOtp = () => {
+    // // // using methods
 
-        SmsAndroid.list(
-            JSON.stringify(filter),
-            (fail) => {
-                console.log('Failed with this error: ' + fail);
-            },
-            (count, smsList) => {
-                console.log('Count: ', count);
-                console.log('List: ', smsList);
-                var arr = JSON.parse(smsList);
 
-                arr.forEach(function (object) {
-                    console.log('Object: ' + object);
-                    console.log('-->' + object.date);
-                    console.log('-->' + object.body);
-                });
-            },
-        );
-    }
+    // const getOtp = () => {
+
+    //     SmsAndroid.list(
+    //         JSON.stringify(filter),
+    //         (fail) => {
+    //             console.log('Failed with this error: ' + fail);
+    //         },
+    //         (count, smsList) => {
+    //             console.log('Count: ', count);
+    //             console.log('List: ', smsList);
+    //             var arr = JSON.parse(smsList);
+
+    //             arr.forEach(function (object) {
+    //                 console.log('Object: ' + object);
+    //                 console.log('-->' + object.date);
+    //                 console.log('-->' + object.body);
+    //             });
+    //         },
+    //     );
+    // }
 
 
     // SmsAndroid.addSmsListener(event => {
