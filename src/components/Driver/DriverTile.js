@@ -14,7 +14,7 @@ import COLORS from "../../constants/Colors";
 
 
 
-const DriverTile = ({ navigation, icon, title, status1, status2, status3 }) => {
+const DriverTile = ({ navigation, icon, title, status1, status2, status3, onPress }) => {
     return (
         <View style={styles.flexBox}>
 
@@ -47,6 +47,7 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3 }) => {
                         ...styles.tile,
                         backgroundColor: COLORS.DARKGRAY,
                     }}
+                    onPress={() => onPress()}
                 >
 
                     <CustomText
@@ -63,6 +64,7 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3 }) => {
 
                     <TouchableOpacity
                         style={styles.tile}
+                        onPress={() => onPress()}
                     >
 
                         <CustomText
@@ -79,6 +81,7 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3 }) => {
                     status3 &&
                     <TouchableOpacity
                         style={styles.tile}
+                        onPress={() => onPress()}
                     >
                         <CustomText
                             text={status3}

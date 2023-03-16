@@ -5,3 +5,4 @@ module.exports = {
   },
   assets: ['./src/assets/fonts'],
 };
+7206393553

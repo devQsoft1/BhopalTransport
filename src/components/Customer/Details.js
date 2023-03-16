@@ -93,20 +93,21 @@ const Details = ({ navigation, route }) => {
                             font={_fontName.InterMedium_500}
                         />
                     </View>
-                    <View style={{ width: '100%' }}>
-
-                        <CustomButton
-                            onPress={() => {
-                                navigation.navigate('GoogleMaps', { item })
-                            }}
-                            title={'Book Now'}
-                            width='100%'
-                        />
-                    </View>
-
                 </View>
 
             </ScrollView >
+            <CustomButton
+                onPress={() => {
+                    navigation.navigate('GoogleMaps', { item })
+                }}
+                title={'Book Now'}
+                width='90%'
+                style={{
+                    alignSelf: "center",
+                    marginBottom: 20
+                }}
+
+            />
         </View >
     )
 }
@@ -119,8 +120,8 @@ const styles = StyleSheet.create({
         // alignItems: "center",
         paddingTop: 40,
         marginHorizontal: 20,
-        flex: 1,
-        justifyContent: "space-between",
+        // flex: 1,
+        // justifyContent: "space-between",
         marginBottom: 10,
     },
 

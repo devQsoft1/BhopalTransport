@@ -91,7 +91,6 @@ const GlobalContextProvide = (props) => {
 
         // success
         if (response.status === 'success') {
-
             if (key === 'login_pocket') {
 
                 // check patron or business owner for success response from server and check from local give by : roleselectionscreen
@@ -204,7 +203,7 @@ const GlobalContextProvide = (props) => {
 
                 let user_type = (data.response.role === '0' || data.response.role === 0) ? 'customer' :
 
-                    (data.response.role === '1' || data.response.role === 1) ? 'business_owner' : 'none'
+                    (data.response.role === '1' || data.response.role === 1) ? 'driver' : 'none'
 
                 setCurrentUser({ ...data.response, user_type });
                 storeDataInAsyncStorage({ key: 'current_user', value: { ...data.response, user_type } })

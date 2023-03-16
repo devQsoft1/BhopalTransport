@@ -39,10 +39,10 @@ export const handleImagePicker = ({ call_back, key }) => {
       })
       // alert(res.customButton);
     } else {
-      // console.log("success /////////////////", res.assets);
+      console.log("success /////////////////", res.assets);
       let url = Platform.OS === 'ios' ? res.assets[0].uri.replace('file://', '') : res.assets[0].uri;
       console.log("Platform //////////////////", url);
-      call_back({ url, key })
+      call_back({ url, key, status: true })
 
     }
   });

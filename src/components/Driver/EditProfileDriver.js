@@ -11,19 +11,64 @@ import TextField from "../../common/TextField";
 import { _windowSize } from "../../common/_windowSize";
 import COLORS from "../../constants/Colors";
 import { Pick_up, Profile_image } from "../../constants/Images";
+import ContextHelper from "../../ContextHooks/ContextHelper";
 import { handleImagePicker } from "../../Utils/Helper";
-
-
+import { api_end_point_constants } from "../../Utils/ApiConstants"
+import { showMessage } from "react-native-flash-message";
 
 
 const EditProfileDriver = ({ navigation }) => {
+    const {
+        currentUser,
+        postData,
+        appStateObject,
+        setLoading
+    } = ContextHelper()
 
+    const [data, setData] = React.useState({
+        name: currentUser?.name,
+        mobile: currentUser?.mobile,
+        profile_image: currentUser?.profile_image,
+        aadhar: currentUser?.aadhar,
+        driving_lincense: currentUser?.driving_lincense,
+        vehicle_registration: currentUser?.vehicle_registration
+    })
+
+    //---------- life cycles
+    React.useEffect(() => {
+        // success
+        if (appStateObject?.update_profile_driver?.response) {
+            setLoading(false)
+            showMessage({
+                message: 'Congratulation! Profile edited successfully!',
+                style: { backgroundColor: '#42AEEC' }
+            });
+        }
+    }, [appStateObject?.update_profile_driver])
+    //--------- user action
+
+    const SaveProfile = () => {
+        if (data?.mobile, data?.name && data?.profile_image && data?.driving_lincense, data?.aadhar && data?.vehicle_registration) {
+            postData({
+                key: 'update_profile_driver',
+                end_point: api_end_point_constants.update_profile_driver,
+                data: {
+                    ...data,
+                    userID: currentUser?.userID
+                }
+            })
+        } else {
+            // show error
+            showMessage({
+                message: 'All fields are required',
+                type: 'danger',
+            });
+        }
+    };
 
     // Selection of the image
     const handleSelectedImage = ({ url, status, msg }) => {
         console.log("url===", url, '---status', status, '-----msg', msg);
-
-
     }
 
     return (
@@ -34,11 +79,27 @@ const EditProfileDriver = ({ navigation }) => {
             />
             <View style={styles.flexBoxs}>
 
-
-                <Image
-                    source={Profile_image}
-                    style={{ height: 140, width: 140, marginBottom: 7 }}
-                />
+                <TouchableOpacity style={{ height: 140, width: 140, borderRadius: 80, overflow: "hidden", marginBottom: 7 }}
+                    onPress={() => handleImagePicker({
+                        call_back: ({ url, status, msg }) => {
+                            if (status === true) {
+                                setData(
+                                    {
+                                        ...data,
+                                        profile_image: url
+                                    }
+                                )
+                            } else {
+                                alert(msg)
+                            }
+                        }
+                    })}
+                >
+                    <Image
+                        source={Profile_image}
+                        style={{ height: 140, width: 140, }}
+                    />
+                </TouchableOpacity>
 
                 <CustomText
                     text={'Change profile photo'}
@@ -49,24 +110,83 @@ const EditProfileDriver = ({ navigation }) => {
                     font={_fontName.InterMedium_500}
                 />
 
-                <TextField placeholder='Name' style={{ width: "100%", marginBottom: 25, marginTop: 45 }} />
-                <TextField placeholder='Number' style={{ width: "100%" }} />
+                <TextField placeholder='Name' style={{ width: "100%", marginBottom: 25, marginTop: 45 }}
+                    value={data?.name}
+                    onChangeText={(text) => {
+                        setData({
+                            ...data,
+                            name: text,
+                        })
+                    }}
+                />
+                <TextField placeholder='Number' style={{ width: "100%" }}
+                    value={data?.mobile}
+                    onChangeText={(text) => {
+                        setData({
+                            ...data,
+                            mobile: text,
+                        })
+                    }}
+                />
 
-                <TouchableOpacity style={{ width: "100%" }} onPress={() => handleImagePicker({ call_back: handleSelectedImage })}>
-                    <CustomUploadImageField lebel='Adhar Card' />
+                <TouchableOpacity style={{ width: "100%" }}
+                    onPress={() => handleImagePicker({
+                        call_back: ({ url, status, msg }) => {
+                            if (status === true) {
+                                setData(
+                                    {
+                                        ...data,
+                                        aadhar: url
+                                    }
+                                )
+                            } else {
+                                alert(msg)
+                            }
+                        }
+                    })}
+                >
+                    <CustomUploadImageField lebel='Adhar Card' image={data?.aadhar} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ width: "100%" }}>
-                    <CustomUploadImageField lebel='Driving license' />
+                <TouchableOpacity style={{ width: "100%" }}
+                    onPress={() => handleImagePicker({
+                        call_back: ({ url, status, msg }) => {
+                            if (status === true) {
+                                setData(
+                                    {
+                                        ...data,
+                                        driving_lincense: url
+                                    }
+                                )
+                            } else {
+                                alert(msg)
+                            }
+                        }
+                    })}>
+                    <CustomUploadImageField lebel='Driving license' image={data?.driving_lincense} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{ width: "100%" }}>
-                    <CustomUploadImageField lebel='Vehicle license registration' />
+                <TouchableOpacity style={{ width: "100%" }}
+                    onPress={() => handleImagePicker({
+                        call_back: ({ url, status, msg }) => {
+                            if (status === true) {
+                                setData(
+                                    {
+                                        ...data,
+                                        vehicle_registration: url
+                                    }
+                                )
+                            } else {
+                                alert(msg)
+                            }
+                        }
+                    })}>
+                    <CustomUploadImageField lebel={'Vehicle license registration'} image={data?.vehicle_registration} />
                 </TouchableOpacity>
 
                 <View style={{ width: '100%', marginTop: 25 }}>
                     <CustomButton
-                        onPress={() => { navigation.goBack() }}
+                        onPress={() => { SaveProfile() }}
                         title={'Save'}
                         width='100%'
                     />

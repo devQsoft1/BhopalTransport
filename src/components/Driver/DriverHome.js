@@ -6,14 +6,49 @@ import COLORS from "../../constants/Colors";
 import Header from "../../common/Header";
 import DriverTile from "./DriverTile";
 import { Menu_Icon } from "../../constants/Images";
-// common
-
-
-// common
+import ContextHelper from "../../ContextHooks/ContextHelper";
+import { api_end_point_constants } from "../../Utils/ApiConstants";
 
 
 
 const DriverHome = ({ navigation }) => {
+    const [bookingData, setBookingData] = React.useState([])
+    const {
+        setLoading,
+        appStateObject,
+        currentUser,
+
+        postData,
+        storeDataInAppState,
+        removeDataFromAppState,
+        storeDataInAsyncStorage,
+        getDataFromAsyncStorage,
+        setCurrentUser,
+    } = ContextHelper()
+
+    console.log(currentUser?.mobile);
+
+    React.useEffect(() => {
+        // success
+        if (appStateObject?.show_bookings?.response) {
+
+            setLoading(false)
+            setBookingData(appStateObject?.show_bookings?.response)
+        }
+    }, [appStateObject?.show_bookings])
+
+    console.log("bookingData", bookingData);
+
+    React.useEffect(() => {
+        postData({
+            key: 'show_bookings',
+            end_point: api_end_point_constants.show_bookings,
+            data: {
+                userID: currentUser.userID,
+            }
+        })
+
+    }, [])
     return (
         <View style={{ flex: 1 }}>
             <Header
@@ -31,8 +66,7 @@ const DriverHome = ({ navigation }) => {
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => <View style={{ height: 17 }} />}
                     renderItem={({ item, indx }) =>
-                        <DriverTile title={item.name} status1={item.status1} status2={item.status2} status3={item.status3} />
-
+                        <DriverTile title={item.name} status1={item.status1} status2={item.status2} status3={item.status3} onPress={() => alert(0)} />
                     } />
 
             </View>

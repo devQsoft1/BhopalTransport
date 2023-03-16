@@ -145,9 +145,13 @@ const CustomDrawer = ({ navigation }) => {
         <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 60 }}>
             <View style={{ ...styles.flexRow }}>
 
-                <Image
-                    source={Profile_image}
-                />
+                <View style={{ height: 72, width: 72, borderRadius: 80, overflow: "hidden" }}>
+
+                    <Image
+                        source={currentUser?.profile_image?.includes("https:") ? { uri: currentUser?.profile_image } : Profile_image}
+                        style={{ height: "100%", width: "100%", marginBottom: 7 }}
+                    />
+                </View>
                 <TouchableOpacity onPress={() => NavigationService.closeDrawer()}>
 
                     <Image

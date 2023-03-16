@@ -62,7 +62,6 @@ const MyBooking = ({ navigation }) => {
             }
         })
     }
-    console.log('========bookingData', bookingData);
     return (
         <>
             <Header
@@ -79,16 +78,19 @@ const MyBooking = ({ navigation }) => {
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => <View style={{ height: 35 }} />}
                     renderItem={({ item, indx }) =>
-                        <TouchableOpacity onPress={() => navigation.navigate('Details', { item })}>
+                        // <TouchableOpacity onPress={() => navigation.navigate('Details', { item })}>
 
-                            <VehicleTile
-                                icon={item?.path + item?.image}
-                                title={item.name}
-                                status={'running'}
-                            />
-                        </TouchableOpacity>
-
-                    } />
+                        <VehicleTile
+                            icon={item?.path + item?.image}
+                            title={item.name}
+                            status={'running'}
+                        />
+                        // </TouchableOpacity>
+                    }
+                    ListEmptyComponent={() => <View style={{ flex: 1, alignSelf: "center" }}>
+                        <Text style={{ textAlign: "center", fontSize: 24, fontFamily: _fontName?.InterMedium_500 }}>No booking available, please book a vehicle</Text>
+                    </View>}
+                />
 
             </View>
         </>

@@ -13,7 +13,7 @@ module.exports = {
   Maps_icon: require("../assets/images/Maps_icon.png"),
   Sucsess_icon: require("../assets/images/Sucsess_icon.png"),
   Phone_icon: require("../assets/images/Phone_icon.png"),
-  Profile_image: require("../assets/images/Profile_image.png"),
+  Profile_image: require("../assets/images/UserIconWhite.png"),
   Arrow_Roght_icon: require("../assets/images/Arrow_Roght_icon.png"),
   TandC_icon: require("../assets/images/TandC_icon.png"),
   Edit_Icon: require("../assets/images/Edit_Icon.png"),

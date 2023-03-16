@@ -71,6 +71,7 @@ function SplashScreen({ navigation }) {
         if (currentUser?.user_type !== 'none' && isSetupDone) {
 
             navigation.replace("DrawerNavigation")
+
         } else if (currentUser?.user_type === 'none' && isSetupDone) {
 
             navigation.replace("RoleSelection")

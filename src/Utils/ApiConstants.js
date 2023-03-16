@@ -15,6 +15,9 @@ export const api_end_point_constants = {
     verify_otp: "verify_otp",
     show_vehicle: "show_bars",
     booking: 'booking',
-    delete_account: "delete_account"
+    delete_account: "delete_account",
+    update_profile: "update_profile",
+    show_bookings: 'show_bookings',
+    update_profile_driver: 'update_profile_driver'
 }
 

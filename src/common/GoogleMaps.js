@@ -47,6 +47,7 @@ const GoogleMaps = ({ navigation, route }) => {
         currentLocation,
         setCurrentUser,
 
+        removeDataFromAppState,
         postData,
     } = ContextHelper()
     console.log('=---=-=-=-route', currentLocation);
@@ -75,9 +76,10 @@ const GoogleMaps = ({ navigation, route }) => {
         if (appStateObject?.booking_poket?.response) {
             setLoading(false)
             setVisible(!visible)
+            removeDataFromAppState({ key: 'booking_poket' })
         }
     }, [appStateObject?.booking_poket])
-
+    console.log('booking_poket===-=-=-', appStateObject?.booking_poket?.response);
     //--------- user Booking
 
     const handleBooking = () => {
@@ -187,6 +189,7 @@ const GoogleMaps = ({ navigation, route }) => {
         )
     }
 
+
     const renderGoogleMap = () => {
 
         return (
@@ -214,9 +217,9 @@ const GoogleMaps = ({ navigation, route }) => {
 
                     onRegionChangeComplete={(e) => {
 
-                        console.log('=-=-=-=-==->', e)
 
                         if (selectedPoint === 'pickup') {
+                            console.log('=-=-=-pickup=-==->', e)
 
                             setPickUpPoint({
                                 start_lat: e.latitude,
@@ -224,6 +227,7 @@ const GoogleMaps = ({ navigation, route }) => {
                                 start_address: 'bhopal',
                             })
                         } else if (selectedPoint === 'drop') {
+                            console.log('=-=-=-drop=-==->', e)
 
                             setDropPoint({
                                 end_lat: e.latitude,

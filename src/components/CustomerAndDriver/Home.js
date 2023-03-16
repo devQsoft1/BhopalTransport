@@ -24,7 +24,6 @@ const Home = ({ navigation }) => {
     } = ContextHelper()
 
     //---------- life cycles
-
     React.useEffect(() => {
 
         getHomeDataFromServer()

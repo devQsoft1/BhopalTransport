@@ -53,7 +53,6 @@ const Login = ({ navigation }) => {
     //---------- life cycles
 
     React.useEffect(() => {
-
         // success
         if (appStateObject?.login_pocket?.response) {
             setLoading(false)
@@ -82,7 +81,7 @@ const Login = ({ navigation }) => {
                 end_point: api_end_point_constants.login,
                 data: {
                     ...data,
-                    // rol: currentUser?.user_type === 'customer' ? 0 : 1
+                    role: currentUser?.user_type === 'customer' ? '0' : '1'
                 }
             })
         } else {
@@ -136,7 +135,7 @@ const Login = ({ navigation }) => {
                     onChangeText={(text) => {
 
                         setData({
-                            ...data,
+                            // ...data,
                             mobile: text,
                         })
                     }}

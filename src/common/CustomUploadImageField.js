@@ -5,7 +5,7 @@ import COLORS from "../constants/Colors";
 import CustomText from "./CustomText";
 
 
-const CustomUploadImageField = ({ lebel }) => {
+const CustomUploadImageField = ({ lebel, image }) => {
 
     return (
         <View style={styles.imageBox}>
@@ -19,11 +19,12 @@ const CustomUploadImageField = ({ lebel }) => {
             />
             <View style={styles.dashed}>
                 <CustomText
-                    text={'Drop files or click to upload'}
+                    numberOfLines={1}
+                    text={image ? image : 'Drop files or click to upload'}
                     style={{
-                        color: '#D9D9D9',
+                        color: image ? "#000" : '#D9D9D9',
                         fontSize: 15,
-                        textAlign: "center",
+                        // textAlign: "center",
                     }}
                     font={_fontName.InterBold_700}
                 />
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
         borderColor: "#D9D9D9",
         marginTop: 2,
         justifyContent: "center",
-
+        alignItems: "center"
     }
 
 })
