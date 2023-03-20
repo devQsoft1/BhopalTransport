@@ -7,14 +7,53 @@ import Header from "../../common/Header";
 import DriverTile from "./DriverTile";
 import { Menu_Icon } from "../../constants/Images";
 import BookingTile from "./BookingTile"
+import ContextHelper from "../../ContextHooks/ContextHelper";
+import { api_end_point_constants } from "../../Utils/ApiConstants";
 // common
-
-
-// common
-
 
 
 const MyBookingsDriver = ({ navigation }) => {
+    //---------- state, veriable, context and hooks
+    const [bookingData, setBookingData] = React.useState([])
+
+    const {
+        setLoading,
+        appStateObject,
+        currentUser,
+
+        postData,
+        storeDataInAppState,
+        removeDataFromAppState,
+        storeDataInAsyncStorage,
+        getDataFromAsyncStorage,
+        setCurrentUser,
+    } = ContextHelper()
+    //---------- life cycles
+
+    React.useEffect(() => {
+
+        getHomeDataFromServer()
+    }, [])
+
+    React.useEffect(() => {
+
+        // success
+        if (appStateObject?.show_old_bookings?.response) {
+
+            setLoading(false)
+            setBookingData(appStateObject?.show_old_bookings?.response)
+        }
+    }, [appStateObject?.show_old_bookings])
+    const getHomeDataFromServer = () => {
+
+        postData({
+            key: 'show_old_bookings',
+            end_point: api_end_point_constants.show_old_bookings,
+            data: {
+                userID: currentUser.userID,
+            }
+        })
+    }
     return (
         <View style={{ flex: 1 }}>
             <Header
@@ -25,14 +64,13 @@ const MyBookingsDriver = ({ navigation }) => {
             <View style={{ marginHorizontal: 10, flex: 1 }}>
                 <FlatList
                     style={{ flex: 1, paddingTop: 50 }}
-                    data={data}
+                    data={bookingData}
                     keyExtractor={item => item.id}
                     ListFooterComponent={() => <View style={{ height: 70 }} />}
                     showsVerticalScrollIndicator={false}
                     ItemSeparatorComponent={() => <View style={{ height: 17 }} />}
                     renderItem={({ item, indx }) =>
-                        <BookingTile title={item.name} status={item.status} />
-
+                        <BookingTile title={item?.username} status={item.status} />
                     } />
 
             </View>

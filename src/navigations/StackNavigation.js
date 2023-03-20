@@ -16,6 +16,7 @@ import MyBookingsDriver from "../components/Driver/MyBookingsDriver"
 import DrawerNavigation from "./CustomerNavigator/DrawerNavigation";
 import ContextHelper from "../ContextHooks/ContextHelper";
 import TermsAndConditions from "../common/TermsAndConditions";
+import StartMaps from "../components/Driver/StartMaps";
 
 
 // global stack veriable
@@ -87,6 +88,12 @@ export const StackNavigation = () => {
                     options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
                     name="TermsAndConditions"
                     component={TermsAndConditions} />
+
+
+                <Stack.Screen
+                    options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
+                    name="StartMaps"
+                    component={StartMaps} />
 
             </Stack.Navigator>
         </>

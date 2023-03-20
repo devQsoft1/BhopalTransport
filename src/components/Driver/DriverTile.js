@@ -14,7 +14,7 @@ import COLORS from "../../constants/Colors";
 
 
 
-const DriverTile = ({ navigation, icon, title, status1, status2, status3, onPress }) => {
+const DriverTile = ({ navigation, icon, title, status, status2, status3, onPress }) => {
     return (
         <View style={styles.flexBox}>
 
@@ -47,11 +47,11 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3, onPres
                         ...styles.tile,
                         backgroundColor: COLORS.DARKGRAY,
                     }}
-                    onPress={() => onPress()}
+                    onPress={() => { status === '1' && onPress('Accept') }}
                 >
 
                     <CustomText
-                        text={status1}
+                        text={status === '1' ? 'Accept' : "Running"}
 
                         style={{
                             color: "#fff",
@@ -59,32 +59,28 @@ const DriverTile = ({ navigation, icon, title, status1, status2, status3, onPres
                         }} />
                 </TouchableOpacity>
 
-                {
-                    status2 &&
 
+                <TouchableOpacity
+                    style={styles.tile}
+                    onPress={() => onPress("Reject")}
+                >
+
+                    <CustomText
+                        text={'Reject'}
+
+                        style={{
+                            color: "black",
+                            fontSize: 12
+                        }} />
+                </TouchableOpacity>
+
+                {status === '1' &&
                     <TouchableOpacity
                         style={styles.tile}
-                        onPress={() => onPress()}
-                    >
-
-                        <CustomText
-                            text={status2}
-
-                            style={{
-                                color: "black",
-                                fontSize: 12
-                            }} />
-                    </TouchableOpacity>
-                }
-
-                {
-                    status3 &&
-                    <TouchableOpacity
-                        style={styles.tile}
-                        onPress={() => onPress()}
+                        onPress={() => onPress("Location")}
                     >
                         <CustomText
-                            text={status3}
+                            text={'Location'}
 
                             style={{
                                 color: "black",

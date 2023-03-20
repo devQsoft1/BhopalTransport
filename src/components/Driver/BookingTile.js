@@ -39,9 +39,9 @@ const DriverTile = ({ navigation, icon, title, status }) => {
             </View >
 
             <View style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "flex-end", width: "65%" }}>
-                <TouchableOpacity
+                <View
                     style={{
-                        backgroundColor: status === 'Rejected' ? COLORS.DARKGRAY : "#21A300",
+                        backgroundColor: status === '3' ? COLORS.DARKGRAY : "#21A300",
                         justifyContent: 'center',
                         alignItems: 'center',
                         width: 80,
@@ -56,13 +56,13 @@ const DriverTile = ({ navigation, icon, title, status }) => {
                 >
 
                     <CustomText
-                        text={status}
+                        text={status === '3' ? 'Rejected' : "Completed"}
 
                         style={{
                             color: "#fff",
                             fontSize: 12
                         }} />
-                </TouchableOpacity>
+                </View>
 
             </View>
         </View>

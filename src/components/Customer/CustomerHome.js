@@ -33,9 +33,7 @@ import VehicleTile from "./VehicleTile";
 //---------- main component
 
 const CustomerHome = ({ navigation, data }) => {
-
     //---------- main view
-
     return (
         <>
             <Header

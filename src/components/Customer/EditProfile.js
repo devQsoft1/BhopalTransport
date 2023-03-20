@@ -32,6 +32,7 @@ const EditProfile = ({ navigation }) => {
         mobile: currentUser?.mobile,
         profile_image: currentUser?.profile_image
     })
+
     //---------- life cycles
     console.log(currentUser?.name);
     React.useEffect(() => {
@@ -69,7 +70,6 @@ const EditProfile = ({ navigation }) => {
 
     // Selection of the image
     const handleSelectedImage = ({ url, status, msg }) => {
-        console.log("url===", url, '---status', status, '-----msg', msg);
         if (status === true) {
             setData(
                 {

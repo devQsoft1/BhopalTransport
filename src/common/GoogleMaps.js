@@ -50,7 +50,6 @@ const GoogleMaps = ({ navigation, route }) => {
         removeDataFromAppState,
         postData,
     } = ContextHelper()
-    console.log('=---=-=-=-route', currentLocation);
 
     const [visible, setVisible] = React.useState(false);
     const [selectedPoint, setSelectedPoint] = React.useState(undefined);
@@ -79,7 +78,6 @@ const GoogleMaps = ({ navigation, route }) => {
             removeDataFromAppState({ key: 'booking_poket' })
         }
     }, [appStateObject?.booking_poket])
-    console.log('booking_poket===-=-=-', appStateObject?.booking_poket?.response);
     //--------- user Booking
 
     const handleBooking = () => {
