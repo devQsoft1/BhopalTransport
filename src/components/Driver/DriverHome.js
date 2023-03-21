@@ -9,10 +9,11 @@ import { Menu_Icon } from "../../constants/Images";
 import ContextHelper from "../../ContextHooks/ContextHelper";
 import { api_end_point_constants } from "../../Utils/ApiConstants";
 import { showMessage } from "react-native-flash-message";
-
+import { useIsFocused } from '@react-navigation/native';
 
 
 const DriverHome = ({ navigation }) => {
+    const isFocused = useIsFocused();
     const [bookingData, setBookingData] = React.useState([])
     const [isRefreshing, setIsRefreshing] = React.useState(false);
     const {
@@ -49,9 +50,13 @@ const DriverHome = ({ navigation }) => {
     }, [appStateObject?.show_bookings])
 
     React.useEffect(() => {
-        getData()
+        if (isFocused) {
+            getData()
+        } else {
+            setBookingData([])
+        }
 
-    }, [])
+    }, [isFocused])
 
     const getData = () => {
 
@@ -68,11 +73,10 @@ const DriverHome = ({ navigation }) => {
         if (appStateObject?.reject_booking_status?.response) {
             setLoading(false)
             showMessage({
-                message: ' Reject booking successfully!',
+                message: 'Reject booking successfully!',
                 style: { backgroundColor: '#42AEEC' }
             });
             removeDataFromAppState({ key: "reject_booking_status" })
-
         } else if (appStateObject?.accept_booking_status?.response) {
             setLoading(false)
             showMessage({

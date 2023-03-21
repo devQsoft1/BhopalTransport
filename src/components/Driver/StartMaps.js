@@ -38,7 +38,7 @@ const StartMaps = ({ navigation, route }) => {
 
     //---------- context, state, and veriables
     const { type, item } = route?.params;
-    console.log('_____', item);
+    let isVisible = type
     const {
         setLoading,
         appStateObject,
@@ -60,6 +60,7 @@ const StartMaps = ({ navigation, route }) => {
                 message: 'start booking successfully!',
                 style: { backgroundColor: '#42AEEC' }
             });
+            navigation.navigate("DrawerNavigation")
             removeDataFromAppState({ key: "start_booking_status" })
         } else if (appStateObject?.accept_booking_status?.response) {
             showMessage({
@@ -72,6 +73,7 @@ const StartMaps = ({ navigation, route }) => {
                 message: 'Reject booking successfully!',
                 style: { backgroundColor: '#42AEEC' }
             });
+            isVisible = "Accept"
             removeDataFromAppState({ key: "reject_booking_status" })
         }
     }, [appStateObject])
@@ -79,7 +81,7 @@ const StartMaps = ({ navigation, route }) => {
 
     const handleBooking = (status) => {
 
-        let booking_status = status === '1' ? "start_booking_status" : status === '5' ? "accept_booking_status" : "reject_booking_status"
+        let booking_status = status === '2' ? "accept_booking_status" : status === '5' ? "start_booking_status" : "reject_booking_status"
 
         postData({
             key: booking_status,
@@ -244,7 +246,7 @@ const StartMaps = ({ navigation, route }) => {
 
                 <View style={{ marginHorizontal: 40 }}>
                     {
-                        type === 'Location' ?
+                        isVisible === 'Location' ?
                             <View style={{ flexDirection: 'row', justifyContent: "space-between" }}>
 
                                 <CustomButton

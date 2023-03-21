@@ -213,7 +213,6 @@ const GlobalContextProvide = (props) => {
 
     // remove data from app state
     const removeDataFromAppState = ({ key }) => {
-
         setAppStateObject({
             ...appStateObject,
             [key]: {},

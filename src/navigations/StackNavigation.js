@@ -11,12 +11,12 @@ import { ActivityIndicator, View } from "react-native";
 import SplashScreen from "../common/SplashScreen";
 import RoleSelection from "../components/CustomerAndDriver/RoleSelection";
 import Login from "../components/CustomerAndDriver/Login";
-import Verify from "../components/CustomerAndDriver/Verify";
 import MyBookingsDriver from "../components/Driver/MyBookingsDriver"
 import DrawerNavigation from "./CustomerNavigator/DrawerNavigation";
 import ContextHelper from "../ContextHooks/ContextHelper";
 import TermsAndConditions from "../common/TermsAndConditions";
 import StartMaps from "../components/Driver/StartMaps";
+import SignUp from "../components/CustomerAndDriver/Signup";
 
 
 // global stack veriable
@@ -69,8 +69,8 @@ export const StackNavigation = () => {
 
                 <Stack.Screen
                     options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}
-                    name="Verify"
-                    component={Verify} />
+                    name="SignUp"
+                    component={SignUp} />
 
                 <Stack.Screen
                     options={{ headerShown: false, cardStyle: { backgroundColor: "#FFFFFF" } }}

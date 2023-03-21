@@ -48,6 +48,7 @@ const Login = ({ navigation }) => {
 
     const [data, setData] = React.useState({
         mobile: "",
+        password: ""
     })
     console.log('=-=-=-=-=', currentUser?.user_type);
     //---------- life cycles
@@ -57,7 +58,8 @@ const Login = ({ navigation }) => {
         if (appStateObject?.login_pocket?.response) {
             setLoading(false)
 
-            navigation.navigate('Verify', { mobile: data.mobile })
+            navigation.replace('DrawerNavigation')
+
         }
     }, [appStateObject?.login_pocket])
 
@@ -105,14 +107,14 @@ const Login = ({ navigation }) => {
             />
 
             <View
-                style={{ flex: 1, marginHorizontal: 33, marginTop: 27 }}
+                style={{ flex: 1, marginHorizontal: 33, marginTop: 15, paddingBottom: 20 }}
             >
                 <CustomText
                     text="Login"
                     style={{
                         color: COLORS.DARKGRAY,
                         fontSize: 25,
-                        paddingBottom: 20
+                        paddingBottom: 15
                     }}
                     font={_fontName.InterBold_700}
                 />
@@ -127,7 +129,7 @@ const Login = ({ navigation }) => {
                 />
 
                 <TextField
-
+                    style={{ marginBottom: 15 }}
                     keyboardType={'numeric'}
                     maxLength={10}
                     placeholder='Enter Your Mobile  No.'
@@ -135,16 +137,52 @@ const Login = ({ navigation }) => {
                     onChangeText={(text) => {
 
                         setData({
-                            // ...data,
+                            ...data,
                             mobile: text,
+                        })
+                    }}
+
+                />
+                <TextField
+
+                    placeholder='Enter Your Password'
+
+                    onChangeText={(text) => {
+
+                        setData({
+                            ...data,
+                            password: text,
                         })
                     }}
 
                 />
 
 
+
                 <View
-                    style={{ flexDirection: "row", marginVertical: 21 }}
+                    style={{ flexDirection: "row", marginTop: 15 }}
+                >
+                    <CustomText
+                        text="Create an Account ? "
+                        style={{
+                            fontSize: 15,
+                        }}
+                    />
+                    <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+
+                        <CustomText
+                            text="Signup "
+                            style={{
+                                fontSize: 18,
+                                color: '#35120F',
+                                fontFamily: _fontName.InterBold_700
+                            }}
+                        />
+                    </TouchableOpacity>
+
+                </View>
+                <View
+                    style={{ flexDirection: "row", marginVertical: 15 }}
                 >
                     {/* <Image
                         source={TermsIcon}
@@ -213,8 +251,7 @@ const Login = ({ navigation }) => {
                         />
                     </TouchableOpacity>
 
-                </View>
-
+                </View >
                 <CustomButton
                     onPress={() => {
                         handleLogin()
