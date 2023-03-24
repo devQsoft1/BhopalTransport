@@ -32,7 +32,7 @@ import ContextHelper from "../ContextHooks/ContextHelper";
 import { api_end_point_constants } from "../Utils/ApiConstants";
 
 //--------- constant api key for map
-const API_KEY = "AIzaSyCooWOL4DXUg5UNAdY8jIOV9Dgwf57lfTM"
+const API_KEY = "AIzaSyCdi6CPk7xVX0AKavFQtXHMcBYBCCMaJHc"
 
 //---------- main componet
 
@@ -266,8 +266,8 @@ const GoogleMaps = ({ navigation, route }) => {
                             description={'This is a description of the marker'}
                         />
                     }
-
                 </MapView>
+
             </View>
         )
     }

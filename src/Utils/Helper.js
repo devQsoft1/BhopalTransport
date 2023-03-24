@@ -41,8 +41,9 @@ export const handleImagePicker = ({ call_back, key }) => {
     } else {
       console.log("success /////////////////", res.assets);
       let url = Platform.OS === 'ios' ? res.assets[0].uri.replace('file://', '') : res.assets[0].uri;
-      console.log("Platform //////////////////", url);
-      call_back({ url, key, status: true })
+      let fileName=res.assets[0].fileName
+      console.log("Platform //////////////////", fileName);
+      call_back({ fileName, key, status: true,url })
 
     }
   });
@@ -89,7 +90,9 @@ export const handleLunchCamra = async ({ call_back, key }) => {
           console.log("responce=>>>>>>>>>", res.assets[0].uri)
           console.log(res.assets);
           let url = Platform.OS === 'ios' ? res.assets[0].uri.replace('file://', '') : res.assets[0].uri;
-          call_back({ url, key })
+          let fileName=res.assets[0].fileName
+          console.log("Platform //////////////////", fileName);
+          call_back({ fileName, key, status: true ,})
 
         }
       });

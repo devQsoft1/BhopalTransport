@@ -188,7 +188,7 @@ const GlobalContextProvide = (props) => {
     //----------------------------------- Store data in state---------------------------------//
 
     // store data in state
-    const storeDataInAppState = ({ key, data }) => {
+    const storeDataInAppState = async({ key, data }) => {
         // console.log("App state Update :::::::", " key ++>", key, " Data>>>", data);
         setAppStateObject({
             ...appStateObject,
@@ -199,18 +199,17 @@ const GlobalContextProvide = (props) => {
         setLoading(false);
 
         if (data?.response?.TOKEN) {
-            if (key === 'signup_pocket' || key === 'login_pocket' || key === "Business_signup_pocket") {
+            if (key === 'signup_pocket' || key === 'login_pocket' || key === "Business_signup_pocket"||key === "update_profile_driver" || key==='update_profile') {
 
                 let user_type = (data.response.role === '0' || data.response.role === 0) ? 'customer' :
 
                     (data.response.role === '1' || data.response.role === 1) ? 'driver' : 'none'
 
-                setCurrentUser({ ...data.response, user_type });
-                storeDataInAsyncStorage({ key: 'current_user', value: { ...data.response, user_type } })
+               await setCurrentUser({ ...data.response, user_type });
+               await storeDataInAsyncStorage({ key: 'current_user', value: { ...data.response, user_type } })
             }
         }
     }
-
     // remove data from app state
     const removeDataFromAppState = ({ key }) => {
         setAppStateObject({

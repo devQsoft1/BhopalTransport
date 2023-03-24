@@ -26,7 +26,7 @@ const RoleSelection = ({ navigation }) => {
         setCurrentUser,
     } = ContextHelper()
 
-    console.log("=-currentUser AT ROLE SELECTION =-", currentUser);
+    // console.log("=-currentUser AT ROLE SELECTION =-", currentUser);
 
     return (
         <View style={{ flex: 1 }} >
@@ -52,6 +52,7 @@ const RoleSelection = ({ navigation }) => {
                     <CustomButton
                         onPress={() => {
                             setCurrentUser({
+                                ...currentUser,
                                 user_type: 'customer'
                             })
                             navigation.navigate('Login')
@@ -64,6 +65,7 @@ const RoleSelection = ({ navigation }) => {
                     <CustomButton
                         onPress={() => {
                             setCurrentUser({
+                                ...currentUser,
                                 user_type: 'driver'
                             })
                             navigation.navigate('Login')

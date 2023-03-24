@@ -22,9 +22,10 @@ const EditProfileDriver = ({ navigation }) => {
         currentUser,
         postData,
         appStateObject,
-        setLoading
+        setLoading,
+        removeDataFromAppState
     } = ContextHelper()
-
+    const [imageUri, setImageUri] = React.useState(null);
     const [data, setData] = React.useState({
         name: currentUser?.name,
         mobile: currentUser?.mobile,
@@ -43,7 +44,10 @@ const EditProfileDriver = ({ navigation }) => {
                 message: 'Congratulation! Profile edited successfully!',
                 style: { backgroundColor: '#42AEEC' }
             });
+            setImageUri(null)
+            removeDataFromAppState({key: 'update_profile_driver'});
         }
+      
     }, [appStateObject?.update_profile_driver])
     //--------- user action
 
@@ -66,10 +70,6 @@ const EditProfileDriver = ({ navigation }) => {
         }
     };
 
-    // Selection of the image
-    const handleSelectedImage = ({ url, status, msg }) => {
-        console.log("url===", url, '---status', status, '-----msg', msg);
-    }
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -81,12 +81,13 @@ const EditProfileDriver = ({ navigation }) => {
 
                 <TouchableOpacity style={{ height: 140, width: 140, borderRadius: 80, overflow: "hidden", marginBottom: 7 }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ url, status, msg }) => {
+                        call_back: ({ fileName, status, msg ,url}) => {
                             if (status === true) {
+                                setImageUri(url)
                                 setData(
                                     {
                                         ...data,
-                                        profile_image: url
+                                        profile_image: fileName
                                     }
                                 )
                             } else {
@@ -95,10 +96,21 @@ const EditProfileDriver = ({ navigation }) => {
                         }
                     })}
                 >
-                    <Image
-                        source={Profile_image}
-                        style={{ height: 140, width: 140, }}
-                    />
+                 {imageUri ? (
+            <Image
+              source={{uri: imageUri}}
+              style={{height: '100%', width: '100%', marginBottom: 7}}
+            />
+          ) : (
+            <Image
+              source={
+                data?.profile_image?.length
+                  ? {uri: currentUser?.path + data?.profile_image}
+                  : Profile_image
+              }
+              style={{height: '100%', width: '100%', marginBottom: 7}}
+            />
+          )}
                 </TouchableOpacity>
 
                 <CustomText
@@ -131,12 +143,12 @@ const EditProfileDriver = ({ navigation }) => {
 
                 <TouchableOpacity style={{ width: "100%" }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ url, status, msg }) => {
+                        call_back: ({ fileName, status, msg }) => {
                             if (status === true) {
                                 setData(
                                     {
                                         ...data,
-                                        aadhar: url
+                                        aadhar: fileName
                                     }
                                 )
                             } else {
@@ -145,17 +157,17 @@ const EditProfileDriver = ({ navigation }) => {
                         }
                     })}
                 >
-                    <CustomUploadImageField lebel='Adhar Card' image={data?.aadhar} />
+                    <CustomUploadImageField lebel='Adhar Card' image={data.aadhar&&"..."+data?.aadhar?.slice(-28)} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ width: "100%" }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ url, status, msg }) => {
+                        call_back: ({ fileName, status, msg }) => {
                             if (status === true) {
                                 setData(
                                     {
                                         ...data,
-                                        driving_lincense: url
+                                        driving_lincense: fileName
                                     }
                                 )
                             } else {
@@ -163,17 +175,17 @@ const EditProfileDriver = ({ navigation }) => {
                             }
                         }
                     })}>
-                    <CustomUploadImageField lebel='Driving license' image={data?.driving_lincense} />
+                    <CustomUploadImageField lebel='Driving license'  image={data?.driving_lincense&&"..."+data?.driving_lincense?.slice(-28)}/>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ width: "100%" }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ url, status, msg }) => {
+                        call_back: ({ fileName, status, msg }) => {
                             if (status === true) {
                                 setData(
                                     {
                                         ...data,
-                                        vehicle_registration: url
+                                        vehicle_registration: fileName
                                     }
                                 )
                             } else {
@@ -181,7 +193,7 @@ const EditProfileDriver = ({ navigation }) => {
                             }
                         }
                     })}>
-                    <CustomUploadImageField lebel={'Vehicle license registration'} image={data?.vehicle_registration} />
+                    <CustomUploadImageField lebel={'Vehicle license registration'} image={data?.vehicle_registration && "..."+data?.vehicle_registration?.slice(-28)} />
                 </TouchableOpacity>
 
                 <View style={{ width: '100%', marginTop: 25 }}>

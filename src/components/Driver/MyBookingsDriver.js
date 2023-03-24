@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { _fontName } from "../../assets/fonts/font";
 import CustomText from "../../common/CustomText";
 import COLORS from "../../constants/Colors";
@@ -71,7 +71,11 @@ const MyBookingsDriver = ({ navigation }) => {
                     ItemSeparatorComponent={() => <View style={{ height: 17 }} />}
                     renderItem={({ item, indx }) =>
                         <BookingTile title={item?.username} status={item.status} />
-                    } />
+                    } 
+                    ListEmptyComponent={() => <View style={{ flex: 1, alignSelf: "center" }}>
+                    <Text style={{ textAlign: "center", fontSize: 24, fontFamily: _fontName?.InterMedium_500 }}>No booking available, please book a vehicle</Text>
+                </View>}
+                    />
 
             </View>
 

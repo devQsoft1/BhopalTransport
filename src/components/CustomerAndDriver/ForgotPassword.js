@@ -24,7 +24,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 //---------- login component
 
-const Login = ({navigation}) => {
+const ForgotPassword = ({navigation}) => {
   //---------- state, veriable, context and hooks
   const {
     isDarkTheme,
@@ -104,7 +104,7 @@ const Login = ({navigation}) => {
           paddingBottom: 20,
         }}>
         <CustomText
-          text="Login"
+          text="Forgot Password"
           style={{
             color: COLORS.DARKGRAY,
             fontSize: 25,
@@ -143,97 +143,8 @@ const Login = ({navigation}) => {
             });
           }}
         />
-        <TouchableOpacity style={{alignItems:"flex-end",marginHorizontal:5}} onPress={()=>navigation.navigate('ForgotPassword')}>
-          <CustomText
-            text="Forgot Password"
-            style={{
-              fontSize: 15,
-              color: '#35120F',
-              fontFamily: _fontName.InterBold_700,
-              
-            }}
-          />
-        </TouchableOpacity>
-
-        <View
-          style={{flexDirection: 'row', marginTop: 15, alignItems: 'center'}}>
-          <CustomText
-            text="Create an Account ? "
-            style={{
-              fontSize: 15,
-            }}
-          />
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <CustomText
-              text="Signup "
-              style={{
-                fontSize: 18,
-                color: '#35120F',
-                fontFamily: _fontName.InterBold_700,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', marginVertical: 15}}>
-          {/* <Image
-                        source={TermsIcon}
-                        resizeMode='contain'
-                    /> */}
-
-          <TouchableOpacity
-            style={{
-              height: 22,
-            }}
-            onPress={() => {
-              setFlag(!flagCheck);
-            }}>
-            {flagCheck ? (
-              <Image source={TermsIcon} resizeMode="contain" />
-            ) : (
-              <TouchableOpacity
-                style={{
-                  borderWidth: 2,
-                  borderColor: 'COLORS.DARKGRAY',
-                  width: 21,
-                  height: 21,
-                  borderRadius: 3,
-                  marginRight: 3,
-                  // marginBottom: 3
-                }}
-                onPress={() => {
-                  setFlag(!flagCheck);
-                }}>
-                {/* {console.warn(flagCheck)} */}
-              </TouchableOpacity>
-            )}
-
-            {/* {console.warn(flagCheck)} */}
-          </TouchableOpacity>
-
-          <CustomText
-            text="Accept"
-            style={{
-              fontSize: 15,
-              marginHorizontal: 6,
-            }}
-          />
-          <TouchableOpacity
-            style={{
-              borderBottomColor: '#000',
-              borderBottomWidth: 1,
-            }}
-            onPress={() => {
-              navigation.navigate('TermsAndConditions');
-            }}>
-            <CustomText
-              text="Terms And Conditions"
-              style={{
-                fontSize: 15,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
         <CustomButton
+          style={{marginTop: 80}}
           onPress={() => {
             handleLogin();
           }}
@@ -244,4 +155,4 @@ const Login = ({navigation}) => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

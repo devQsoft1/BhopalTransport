@@ -25,9 +25,12 @@ const Home = ({ navigation }) => {
 
     //---------- life cycles
     React.useEffect(() => {
+if(currentUser.userID){
+    getHomeDataFromServer()
 
-        getHomeDataFromServer()
-    }, [])
+}
+        console.log('currentUser.userID',currentUser.userID);
+    }, [currentUser])
 
     React.useEffect(() => {
 

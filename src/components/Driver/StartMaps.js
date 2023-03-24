@@ -30,7 +30,7 @@ import ModalContainer from "../../common/ModalContainer";
 import TextField from "../../common/TextField";
 
 //--------- constant api key for map
-const API_KEY = "AIzaSyCooWOL4DXUg5UNAdY8jIOV9Dgwf57lfTM"
+const API_KEY = "AIzaSyCdi6CPk7xVX0AKavFQtXHMcBYBCCMaJHc"
 
 //---------- main componet
 

@@ -29,7 +29,6 @@ const DriverHome = ({ navigation }) => {
         setCurrentUser,
     } = ContextHelper()
 
-    console.log(currentUser);
     const wait = (timeout) => { // Defined the timeout function for testing purpose
         return new Promise(resolve => setTimeout(resolve, timeout));
     }
@@ -50,13 +49,14 @@ const DriverHome = ({ navigation }) => {
     }, [appStateObject?.show_bookings])
 
     React.useEffect(() => {
-        if (isFocused) {
+        if (isFocused && currentUser.userID) {
             getData()
         } else {
             setBookingData([])
         }
 
     }, [isFocused])
+    
 
     const getData = () => {
 

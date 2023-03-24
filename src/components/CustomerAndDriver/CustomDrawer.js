@@ -43,8 +43,6 @@ const CustomDrawer = ({ navigation }) => {
     React.useEffect(() => {
         // success
         if (appStateObject?.delete_account_pocket?.status === 'success') {
-
-
             navigation.replace('SplashScreen')
             showMessage({
                 message: 'You are successfully Delete from account!  Now you can login again new account!',
@@ -147,7 +145,11 @@ const CustomDrawer = ({ navigation }) => {
                 <View style={{ height: 72, width: 72, borderRadius: 80, overflow: "hidden" }}>
 
                     <Image
-                        source={currentUser?.profile_image?.includes("https:") ? { uri: currentUser?.item?.path + currentUser?.profile_image } : Profile_image}
+                    source={
+                        currentUser?.profile_image?.length
+                          ? {uri: currentUser?.path+ currentUser?.profile_image}
+                          : Profile_image
+                      }
                         style={{ height: "100%", width: "100%", marginBottom: 7 }}
                     />
                 </View>
