@@ -71,7 +71,7 @@ const GlobalContextProvide = (props) => {
             setLoading(true);
 
             console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
-            console.log("POST DATA TO SERVER(>>>>>>>>> >>>>>>>>>>>>>>)", data);
+            console.log("POST DATA TO SERVER(>>>>>>>>> >>>>>>>>>>>>>>)");
             console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
 
             postFormDataToServer({
@@ -86,7 +86,7 @@ const GlobalContextProvide = (props) => {
         let data
 
         console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('-=-=-= call back after server response -----')
+        console.log('-=-=-= call back after server response -----',response)
         console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
 
         // success
@@ -132,7 +132,10 @@ const GlobalContextProvide = (props) => {
             }
 
             setLoading(false);
-
+            if(response?.error=== 'No booking Found !')
+{
+    return;
+}
             // show error
             showMessage({
                 message: response?.error?.toString() || 'server error',

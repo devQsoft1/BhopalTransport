@@ -50,7 +50,7 @@ const GoogleMaps = ({ navigation, route }) => {
         removeDataFromAppState,
         postData,
     } = ContextHelper()
-
+    const [ContactData, setContactData] = React.useState([]);
     const [visible, setVisible] = React.useState(false);
     const [selectedPoint, setSelectedPoint] = React.useState(undefined);
     const [pickupPoint, setPickUpPoint] = React.useState({
@@ -64,11 +64,24 @@ const GoogleMaps = ({ navigation, route }) => {
         end_address: 'bhopal'
     });
 
-
-
-
     //---------- life cycles
-
+    React.useEffect(() => {
+        // success
+        if (appStateObject?.Contact_data_pocket?.response) {
+          setLoading(false);
+          setContactData(appStateObject?.Contact_data_pocket?.response);
+        }
+      }, [appStateObject?.Contact_data_pocket]);
+    
+      React.useEffect(() => {
+          postData({
+            key: 'Contact_data_pocket',
+            end_point: api_end_point_constants.show_contact_details,
+            data:{
+                type:"Mobile"
+            }
+          });
+        }, []);
     React.useEffect(() => {
 
         // success
@@ -332,7 +345,7 @@ const GoogleMaps = ({ navigation, route }) => {
                     />
 
                 </View>
-
+{/* {renderAutoComplete()} */}
                 <View style={{ marginHorizontal: 40 }}>
 
                     <CustomButton
@@ -344,12 +357,12 @@ const GoogleMaps = ({ navigation, route }) => {
 
             </View>
             {
-                visible &&
+                !visible &&
                 <ModalContainer
                     isVisible={visible}
                     render_view_key={'booking_done'}
                     hideModal={() => setVisible(!visible)}
-                    content={PhoneNumber}
+                    content={ContactData}
                     navigation={navigation}
                 />
             }

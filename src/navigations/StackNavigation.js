@@ -18,6 +18,8 @@ import TermsAndConditions from '../common/TermsAndConditions';
 import StartMaps from '../components/Driver/StartMaps';
 import SignUp from '../components/CustomerAndDriver/Signup';
 import ForgotPassword from '../components/CustomerAndDriver/ForgotPassword';
+import Help from '../components/CustomerAndDriver/Help';
+import VerifyOtp from '../components/CustomerAndDriver/VerifyOtp';
 
 // global stack veriable
 const Stack = createStackNavigator();
@@ -26,10 +28,9 @@ const Stack = createStackNavigator();
 export const StackNavigation = () => {
   //---------- state, veriable, context and hooks
 
-  const {loading} = ContextHelper();
+  const {loading ,currentUser} = ContextHelper();
 
   //---------- return main view
-
   return (
     <>
       {/* Global Loader */}
@@ -57,7 +58,9 @@ export const StackNavigation = () => {
           name="SplashScreen"
           component={SplashScreen}
         />
-
+{
+  !currentUser?.TOKEN&&
+  <>
         <Stack.Screen
           options={{
             headerShown: false,
@@ -75,6 +78,9 @@ export const StackNavigation = () => {
           name="Login"
           component={Login}
         />
+  </>
+
+}
 
         <Stack.Screen
           options={{
@@ -92,6 +98,15 @@ export const StackNavigation = () => {
           }}
           name="ForgotPassword"
           component={ForgotPassword}
+        />
+
+<Stack.Screen
+          options={{
+            headerShown: false,
+            cardStyle: {backgroundColor: '#FFFFFF'},
+          }}
+          name="VerifyOtp"
+          component={VerifyOtp}
         />
 
         <Stack.Screen
@@ -128,6 +143,15 @@ export const StackNavigation = () => {
           }}
           name="StartMaps"
           component={StartMaps}
+        />
+
+        <Stack.Screen
+          options={{
+            headerShown: false,
+            cardStyle: {backgroundColor: '#FFFFFF'},
+          }}
+          name="Help"
+          component={Help}
         />
       </Stack.Navigator>
     </>

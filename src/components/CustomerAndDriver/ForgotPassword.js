@@ -14,26 +14,24 @@ import HeaderFirst from '../../common/HeaderFirst';
 import TextField from '../../common/TextField';
 
 // constants
-import {TermsIcon} from '../../constants/Images';
 import COLORS from '../../constants/Colors';
-
-// utils
-import {api_end_point_constants} from '../../Utils/ApiConstants';
 import ContextHelper from '../../ContextHooks/ContextHelper';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import { api_end_point_constants } from '../../Utils/ApiConstants';
+
 
 //---------- login component
 
 const ForgotPassword = ({navigation}) => {
   //---------- state, veriable, context and hooks
+  const [email,setEmail]=React.useState()
   const {
+    setLoading,
     isDarkTheme,
     theme,
     appStateObject,
     appStateArray,
     currentUser,
 
-    setLoading,
     postData,
     changeTheme,
     storeDataInAppState,
@@ -42,55 +40,32 @@ const ForgotPassword = ({navigation}) => {
     getDataFromAsyncStorage,
     setCurrentUser,
   } = ContextHelper();
-
-  const [flagCheck, setFlag] = React.useState(false);
-
-  const [data, setData] = React.useState({
-    mobile: '',
-    password: '',
-  });
-  console.log('=-=-=-=-=', currentUser?.user_type);
-  //---------- life cycles
-
   React.useEffect(() => {
     // success
-    if (appStateObject?.login_pocket?.response) {
+    if (appStateObject?.forgot_password_pocket?.status==='success') {
       setLoading(false);
-
-      navigation.replace('DrawerNavigation');
+           navigation.replace('VerifyOtp',appStateObject?.forgot_password_pocket?.response?.email);
+           removeDataFromAppState({key: 'forgot_password_pocket'});
     }
-  }, [appStateObject?.login_pocket]);
+  }, [appStateObject?.forgot_password_pocket]);
 
-  //--------- user Login
-
-  const handleLogin = () => {
-    if (!flagCheck) {
-      // show error
-      showMessage({
-        message: 'Please accept terms and conditoins!',
-        type: 'danger',
-      });
-      return;
-    }
-    if (data?.mobile) {
+  const handleSubmit =()=>{
+    if(email){
       postData({
-        key: 'login_pocket',
-        end_point: api_end_point_constants.login,
+        key: 'forgot_password_pocket',
+        end_point: api_end_point_constants.forgot_password,
         data: {
-          ...data,
-          role: currentUser?.user_type === 'customer' ? '0' : '1',
+          email:email
         },
       });
-    } else {
-      // show error
+    }else{
       showMessage({
-        message: 'All fields are required',
+        message: 'Please enter email address',
         type: 'danger',
       });
     }
-  };
 
-  //--------- main view
+  }
 
   return (
     <ScrollView style={{flex: 1}}>
@@ -114,8 +89,7 @@ const ForgotPassword = ({navigation}) => {
         />
 
         <CustomText
-          text="Lorem ipsum dolor  amet. voluptat
-                    pudiandae sed totam tem"
+          text="Enter your email to forget password"
           style={{
             fontSize: 15,
             paddingBottom: 20,
@@ -124,31 +98,18 @@ const ForgotPassword = ({navigation}) => {
 
         <TextField
           style={{marginBottom: 15}}
-          keyboardType={'numeric'}
-          maxLength={10}
-          placeholder="Enter Your Mobile  No."
+          placeholder="Enter Your Email"
           onChangeText={text => {
-            setData({
-              ...data,
-              mobile: text,
-            });
+            setEmail(text);
           }}
         />
-        <TextField
-          placeholder="Enter Your Password"
-          onChangeText={text => {
-            setData({
-              ...data,
-              password: text,
-            });
-          }}
-        />
+
         <CustomButton
           style={{marginTop: 80}}
           onPress={() => {
-            handleLogin();
+            handleSubmit()
           }}
-          title={'Login'}
+          title={'Submit'}
         />
       </View>
     </ScrollView>

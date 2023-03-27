@@ -38,6 +38,8 @@ const CustomerHome = ({ navigation, data }) => {
         <>
             <Header
                 leftIcon={Menu_Icon}
+                navigation={navigation}
+                isHelp={true}
             />
 
             <View
@@ -52,7 +54,6 @@ const CustomerHome = ({ navigation, data }) => {
                     ItemSeparatorComponent={() => <View style={{ height: 35 }} />}
                     renderItem={({ item, index }) =>
                         <TouchableOpacity
-                            key={index}
                             onPress={() => navigation.navigate('Details', { item })}
                         >
                             <VehicleTile

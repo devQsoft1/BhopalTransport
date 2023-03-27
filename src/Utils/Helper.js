@@ -40,14 +40,13 @@ export const handleImagePicker = ({ call_back, key }) => {
       // alert(res.customButton);
     } else {
       console.log("success /////////////////", res.assets);
-      let url = Platform.OS === 'ios' ? res.assets[0].uri.replace('file://', '') : res.assets[0].uri;
-      let fileName=res.assets[0].fileName
-      console.log("Platform //////////////////", fileName);
-      call_back({ fileName, key, status: true,url })
+      // let url = Platform.OS === 'ios' ? res.assets[0].uri.replace('file://', '') : res.assets[0].uri;
+      // let fileName=res.assets[0].fileName
+      // console.log("Platform //////////////////", fileName);
+      call_back({file: res.assets[0], status: true })
 
     }
-  });
-}
+  });}
 
 // ---------- select from Camra
 export const handleLunchCamra = async ({ call_back, key }) => {

@@ -26,25 +26,37 @@ const EditProfileDriver = ({ navigation }) => {
         removeDataFromAppState
     } = ContextHelper()
     const [imageUri, setImageUri] = React.useState(null);
+    const [aadhar, setAadhaar] = React.useState({ name: currentUser?.aadhar});
+    const [Driving, setDriving] = React.useState({ name: currentUser?.driving_lincense});
+    const [registration, setIRegistration] = React.useState({ name: currentUser?.vehicle_registration});
     const [data, setData] = React.useState({
         name: currentUser?.name,
-        mobile: currentUser?.mobile,
-        profile_image: currentUser?.profile_image,
-        aadhar: currentUser?.aadhar,
-        driving_lincense: currentUser?.driving_lincense,
-        vehicle_registration: currentUser?.vehicle_registration
+        email: currentUser?.email,
+        // profile_image: currentUser?.profile_image,
+        // aadhar: currentUser?.aadhar,
+        // driving_lincense: currentUser?.driving_lincense,
+        // vehicle_registration: currentUser?.vehicle_registration
     })
-
+console.log('===========',currentUser,);
     //---------- life cycles
     React.useEffect(() => {
         // success
         if (appStateObject?.update_profile_driver?.response) {
+            let userData=appStateObject?.update_profile_driver?.response;
             setLoading(false)
+            setData({
+                name:userData?.name,
+                email:userData?.email
+            })
+            setAadhaar({name:userData?.aadhar})
+            setDriving({name:userData?.driving_lincense})
+            setIRegistration({name:userData?.vehicle_registration})
             showMessage({
                 message: 'Congratulation! Profile edited successfully!',
                 style: { backgroundColor: '#42AEEC' }
             });
             setImageUri(null)
+         
             removeDataFromAppState({key: 'update_profile_driver'});
         }
       
@@ -52,13 +64,29 @@ const EditProfileDriver = ({ navigation }) => {
     //--------- user action
 
     const SaveProfile = () => {
-        if (data?.mobile, data?.name && data?.profile_image && data?.driving_lincense, data?.aadhar && data?.vehicle_registration) {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        if (data?.email, data?.name && imageUri?.name && Driving?.name, aadhar?.name && registration?.name) {
+            if(reg.test(data?.email) === false){
+                showMessage({
+                    message: "Please enter valid email address",
+                    type: 'danger',
+                });
+                return;
+            };
             postData({
                 key: 'update_profile_driver',
                 end_point: api_end_point_constants.update_profile_driver,
                 data: {
-                    ...data,
-                    userID: currentUser?.userID
+                    userID: currentUser?.userID,
+                    email:data?.email,
+                    profile_image:{
+                        uri:imageUri?.uri,
+                        type:imageUri?.type,
+                        name:imageUri?.fileName,
+                       },
+                    aadhar:aadhar,
+                    driving_lincense:Driving,
+                    vehicle_registration:registration,
                 }
             })
         } else {
@@ -70,7 +98,7 @@ const EditProfileDriver = ({ navigation }) => {
         }
     };
 
-
+console.log("DddDDDDD",Driving);
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <Header
@@ -81,31 +109,25 @@ const EditProfileDriver = ({ navigation }) => {
 
                 <TouchableOpacity style={{ height: 140, width: 140, borderRadius: 80, overflow: "hidden", marginBottom: 7 }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ fileName, status, msg ,url}) => {
+                        call_back: ({ file, status, msg}) => {
                             if (status === true) {
-                                setImageUri(url)
-                                setData(
-                                    {
-                                        ...data,
-                                        profile_image: fileName
-                                    }
-                                )
+                                setImageUri(file)
                             } else {
                                 alert(msg)
                             }
                         }
                     })}
                 >
-                 {imageUri ? (
+                 {imageUri?.uri ? (
             <Image
-              source={{uri: imageUri}}
+              source={{uri: imageUri?.uri}}
               style={{height: '100%', width: '100%', marginBottom: 7}}
             />
           ) : (
             <Image
               source={
-                data?.profile_image?.length
-                  ? {uri: currentUser?.path + data?.profile_image}
+                currentUser?.profile_image?.length
+                  ? {uri: currentUser?.path + currentUser?.profile_image}
                   : Profile_image
               }
               style={{height: '100%', width: '100%', marginBottom: 7}}
@@ -131,24 +153,25 @@ const EditProfileDriver = ({ navigation }) => {
                         })
                     }}
                 />
-                <TextField placeholder='Number' style={{ width: "100%" }}
-                    value={data?.mobile}
+                <TextField placeholder='Email' style={{ width: "100%" }}
+                    value={data?.email}
                     onChangeText={(text) => {
                         setData({
                             ...data,
-                            mobile: text,
+                            email: text,
                         })
                     }}
                 />
 
                 <TouchableOpacity style={{ width: "100%" }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ fileName, status, msg }) => {
+                        call_back: ({ file, status, msg}) => {
                             if (status === true) {
-                                setData(
+                                setAadhaar(
                                     {
-                                        ...data,
-                                        aadhar: fileName
+                         uri:file?.uri,
+                        type:file?.type,
+                        name:file?.fileName,
                                     }
                                 )
                             } else {
@@ -157,17 +180,18 @@ const EditProfileDriver = ({ navigation }) => {
                         }
                     })}
                 >
-                    <CustomUploadImageField lebel='Adhar Card' image={data.aadhar&&"..."+data?.aadhar?.slice(-28)} />
+                    <CustomUploadImageField lebel='Adhar Card' image={aadhar?.name&&"..."+aadhar?.name?.slice(-28)} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ width: "100%" }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ fileName, status, msg }) => {
+                        call_back: ({ file, status, msg}) => {
                             if (status === true) {
-                                setData(
+                                setDriving(
                                     {
-                                        ...data,
-                                        driving_lincense: fileName
+                         uri:file?.uri,
+                        type:file?.type,
+                        name:file?.fileName,
                                     }
                                 )
                             } else {
@@ -175,17 +199,18 @@ const EditProfileDriver = ({ navigation }) => {
                             }
                         }
                     })}>
-                    <CustomUploadImageField lebel='Driving license'  image={data?.driving_lincense&&"..."+data?.driving_lincense?.slice(-28)}/>
+                    <CustomUploadImageField lebel='Driving license'  image={Driving?.name&&"..."+Driving?.name?.slice(-28)}/>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={{ width: "100%" }}
                     onPress={() => handleImagePicker({
-                        call_back: ({ fileName, status, msg }) => {
+                        call_back: ({ file, status, msg}) => {
                             if (status === true) {
-                                setData(
+                                setIRegistration(
                                     {
-                                        ...data,
-                                        vehicle_registration: fileName
+                         uri:file?.uri,
+                        type:file?.type,
+                        name:file?.fileName,
                                     }
                                 )
                             } else {
@@ -193,7 +218,7 @@ const EditProfileDriver = ({ navigation }) => {
                             }
                         }
                     })}>
-                    <CustomUploadImageField lebel={'Vehicle license registration'} image={data?.vehicle_registration && "..."+data?.vehicle_registration?.slice(-28)} />
+                    <CustomUploadImageField lebel={'Vehicle license registration'} image={registration?.name && "..."+registration?.name?.slice(-28)} />
                 </TouchableOpacity>
 
                 <View style={{ width: '100%', marginTop: 25 }}>

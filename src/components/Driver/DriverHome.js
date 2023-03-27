@@ -121,6 +121,7 @@ const DriverHome = ({ navigation }) => {
                 title='HOME'
                 leftIcon={Menu_Icon}
                 navigation={navigation}
+                isHelp={true}
             />
 
             <View style={{ marginHorizontal: 20, flex: 1 }}>

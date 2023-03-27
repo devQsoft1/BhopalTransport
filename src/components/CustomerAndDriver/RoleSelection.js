@@ -27,17 +27,18 @@ const RoleSelection = ({ navigation }) => {
     } = ContextHelper()
 
     // console.log("=-currentUser AT ROLE SELECTION =-", currentUser);
-
     return (
         <View style={{ flex: 1 }} >
 
             <HeaderFirst
                 isBack={false}
+                isHelp={true}
+                navigation={navigation}
             />
             <View style={{ justifyContent: "center", flex: 1, marginHorizontal: 45 }}>
 
                 <CustomText
-                    text="Ea quia velit qui exercitationem autem a modi"
+                    text="Please Choose Your Role First"
                     style={{
                         fontSize: 12,
                         textAlign: 'center',

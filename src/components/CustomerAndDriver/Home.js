@@ -26,8 +26,9 @@ const Home = ({ navigation }) => {
     //---------- life cycles
     React.useEffect(() => {
 if(currentUser.userID){
+    if(currentUser?.user_type === 'customer'){
     getHomeDataFromServer()
-
+    }
 }
         console.log('currentUser.userID',currentUser.userID);
     }, [currentUser])
@@ -46,7 +47,6 @@ if(currentUser.userID){
     //--------- user Login
 
     const getHomeDataFromServer = () => {
-
         postData({
             key: 'home_data_pocket',
             end_point: api_end_point_constants.show_vehicle,

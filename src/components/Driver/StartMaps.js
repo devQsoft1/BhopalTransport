@@ -38,6 +38,7 @@ const StartMaps = ({ navigation, route }) => {
 
     //---------- context, state, and veriables
     const { type, item } = route?.params;
+
     let isVisible = type
     const {
         setLoading,
@@ -51,7 +52,7 @@ const StartMaps = ({ navigation, route }) => {
     } = ContextHelper()
 
     //---------- life cycles
-
+  
     React.useEffect(() => {
         setLoading(false)
         // success
@@ -80,9 +81,7 @@ const StartMaps = ({ navigation, route }) => {
     //--------- user Booking
 
     const handleBooking = (status) => {
-
         let booking_status = status === '2' ? "accept_booking_status" : status === '5' ? "start_booking_status" : "reject_booking_status"
-
         postData({
             key: booking_status,
             end_point: api_end_point_constants.update_booking_status,

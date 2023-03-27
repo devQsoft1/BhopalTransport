@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Image, ImageBackground, StyleSheet, Dimensions, View, TouchableOpacity } from "react-native";
+import { Image, ImageBackground, StyleSheet, Dimensions, View, TouchableOpacity, Text } from "react-native";
 import { _fontName } from "../assets/fonts/font";
 import COLORS from "../constants/Colors";
-import { App_Logo1, BackGroundImgColor, Back_Arrow } from "../constants/Images";
+import { App_Logo1, BackGroundImgColor, Back_Arrow, Suport } from "../constants/Images";
 import CustomText from "./CustomText";
 import NavigationService from '../navigations/NavigationService'
 
@@ -11,11 +11,39 @@ import NavigationService from '../navigations/NavigationService'
 
 const windowWidth = Dimensions.get('window').width;
 
-const Header = ({ isBack = true, navigation, leftIcon, title }) => {
+const Header = ({ isBack = true, navigation, leftIcon, title,isHelp=false }) => {
     return (
 
         <View style={{ backgroundColor: COLORS.DARKGRAY }}>
-
+{isHelp&&
+      <TouchableOpacity
+        style={{
+          position: 'absolute',
+          right: 10,
+          top: 20,
+          backgroundColor: '#fff',
+          borderRadius: 10,
+          padding: 3,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+        onPress={()=>navigation.navigate("Help")}>
+        <Text
+          style={{
+            fontSize: 18,
+            fontFamily: _fontName.InterSemiBold_600,
+            textAlign: 'center',
+            color: '#35120F',
+          }}>
+          Help
+        </Text>
+        <Image
+          source={Suport}
+          style={{width: 15, height: 15}}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+        }
             <View
                 style={styles.flexCenter}
             >
@@ -39,6 +67,7 @@ const Header = ({ isBack = true, navigation, leftIcon, title }) => {
                     style={{
                         color: "#fff",
                         fontSize: 25,
+                        textAlign:"center"
                     }}
                     font={_fontName.InterBold_700}
                 />

@@ -8,7 +8,7 @@ import { showMessage, hideMessage } from "react-native-flash-message";
 // common
 import HeaderFirst from "../../common/HeaderFirst";
 import COLORS from "../../constants/Colors";
-import { App_Logo, Arrow_Roght_icon, delete_user, Edit_Icon, Profile_image, TandC_icon, Truck_icon } from "../../constants/Images";
+import { App_Logo, Arrow_Roght_icon, delete_user, Edit_Icon, Profile_image, Suport, TandC_icon, Truck_icon } from "../../constants/Images";
 import ContextHelper from "../../ContextHooks/ContextHelper";
 import NavigationService from "../../navigations/NavigationService";
 import MyBookingsDriver from "../Driver/MyBookingsDriver"
@@ -74,6 +74,10 @@ const CustomDrawer = ({ navigation }) => {
         else if (name === "Delete Account") {
             // navigation.navigate("TermsAndConditions")
             handleAccountDelete()
+        } else if (name === "Help") {
+            // navigation.navigate("TermsAndConditions")
+            navigation.navigate("Help")
+
         }
 
     }
@@ -161,7 +165,7 @@ const CustomDrawer = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
             <CustomText
-                text="Wayne Rooney"
+                text={currentUser?.name}
                 style={{
                     color: COLORS.WHITE,
                     fontSize: 25,
@@ -211,7 +215,7 @@ const CustomDrawer = ({ navigation }) => {
                 backgroundColor={COLORS.WHITE}
                 color={COLORS.DARKGRAY}
                 width={124}
-                style={{ alignSelf: "center", marginTop: 70 }}
+                style={{ alignSelf: "center", marginTop: 50 }}
             />
 
             <Image
@@ -267,5 +271,10 @@ const data = [
         id: 4,
         name: "Delete Account",
         icon: delete_user
+    },
+    {
+        id: 4,
+        name: "Help",
+        icon: Suport
     },
 ]

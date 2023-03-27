@@ -21,6 +21,7 @@ import COLORS from '../../constants/Colors';
 import {api_end_point_constants} from '../../Utils/ApiConstants';
 import ContextHelper from '../../ContextHooks/ContextHelper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import { CommonActions } from '@react-navigation/native';
 
 //---------- login component
 
@@ -46,10 +47,9 @@ const Login = ({navigation}) => {
   const [flagCheck, setFlag] = React.useState(false);
 
   const [data, setData] = React.useState({
-    mobile: '',
+    email: '',
     password: '',
   });
-  console.log('=-=-=-=-=', currentUser?.user_type);
   //---------- life cycles
 
   React.useEffect(() => {
@@ -58,21 +58,23 @@ const Login = ({navigation}) => {
       setLoading(false);
 
       navigation.replace('DrawerNavigation');
+   
+    
     }
   }, [appStateObject?.login_pocket]);
 
   //--------- user Login
-
   const handleLogin = () => {
-    if (!flagCheck) {
-      // show error
-      showMessage({
-        message: 'Please accept terms and conditoins!',
-        type: 'danger',
-      });
-      return;
-    }
-    if (data?.mobile) {
+   
+    if (data?.email && data?.email) {
+      if (!flagCheck) {
+        // show error
+        showMessage({
+          message: 'Please accept terms and conditoins!',
+          type: 'danger',
+        });
+        return;
+      }
       postData({
         key: 'login_pocket',
         end_point: api_end_point_constants.login,
@@ -94,7 +96,7 @@ const Login = ({navigation}) => {
 
   return (
     <ScrollView style={{flex: 1}}>
-      <HeaderFirst navigation={navigation} />
+      <HeaderFirst navigation={navigation} isHelp={true} />
 
       <View
         style={{
@@ -114,8 +116,7 @@ const Login = ({navigation}) => {
         />
 
         <CustomText
-          text="Lorem ipsum dolor  amet. voluptat
-                    pudiandae sed totam tem"
+          text="Enter Your Email Password To Login"
           style={{
             fontSize: 15,
             paddingBottom: 20,
@@ -124,13 +125,11 @@ const Login = ({navigation}) => {
 
         <TextField
           style={{marginBottom: 15}}
-          keyboardType={'numeric'}
-          maxLength={10}
-          placeholder="Enter Your Mobile  No."
+          placeholder="Enter Your Email"
           onChangeText={text => {
             setData({
               ...data,
-              mobile: text,
+              email: text,
             });
           }}
         />

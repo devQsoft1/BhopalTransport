@@ -32,15 +32,16 @@ const EditProfile = ({navigation}) => {
   const [imageUri, setImageUri] = React.useState(null);
   const [data, setData] = React.useState({
     name: currentUser?.name,
-    mobile: currentUser?.mobile,
-    profile_image: currentUser?.profile_image,
+    email: currentUser?.email,
+    profile_image:currentUser?.profile_image
   });
 
   //---------- life cycles
-
+// console.log("curent user===", currentUser?.profile_image);
   React.useEffect(() => {
     // success
     if (appStateObject?.update_profile?.response) {
+      setData(appStateObject?.update_profile?.response)
       setLoading(false);
       showMessage({
         message: 'Congratulation! Profile edited successfully!',
@@ -53,14 +54,31 @@ const EditProfile = ({navigation}) => {
   //--------- user action
 
   const SaveProfile = () => {
-    if ((data?.mobile, data?.name && data?.profile_image)) {
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+console.log('+_+__+_++_',imageUri);
+    if (data?.email&& data?.name&&imageUri?.fileName) {
+      if(reg.test(data?.email) === false){
+        showMessage({
+            message: "Please enter valid email address",
+            type: 'danger',
+        });
+        return;
+    };
+   
       postData({
         key: 'update_profile',
         end_point: api_end_point_constants.update_profile,
         data: {
-          ...data,
+          name:data?.name,
+          email:data?.email,
           userID: currentUser?.userID,
-        },
+         profile_image:{
+          uri:imageUri?.uri,
+          type:imageUri?.type,
+          name:imageUri?.fileName,
+         }
+        }
+        
       });
     } else {
       // show error
@@ -72,17 +90,14 @@ const EditProfile = ({navigation}) => {
   };
 
   // Selection of the image
-  const handleSelectedImage = ({fileName, status, msg, url}) => {
+  const handleSelectedImage = ({file, status, msg}) => {
     if (status === true) {
-      setImageUri(url);
-      setData({
-        ...data,
-        profile_image: fileName,
-      });
+      setImageUri(file);
     } else {
       alert(msg);
     }
   };
+  console.log("_____",imageUri?.uri);
   return (
     <View style={{flex: 1}}>
       <Header title="Edit Profile" navigation={navigation} />
@@ -95,16 +110,16 @@ const EditProfile = ({navigation}) => {
             overflow: 'hidden',
           }}
           onPress={() => handleImagePicker({call_back: handleSelectedImage})}>
-          {imageUri ? (
+          {imageUri?.uri ? (
             <Image
-              source={{uri: imageUri}}
+              source={{uri: imageUri?.uri}}
               style={{height: '100%', width: '100%', marginBottom: 7}}
             />
           ) : (
             <Image
               source={
                 data?.profile_image?.length
-                  ? {uri: currentUser?.path + data?.profile_image}
+                  ? {uri: currentUser?.path + currentUser?.profile_image}
                   : Profile_image
               }
               style={{height: '100%', width: '100%', marginBottom: 7}}
@@ -133,14 +148,13 @@ const EditProfile = ({navigation}) => {
           }}
         />
         <TextField
-          placeholder="Number"
+          placeholder="email"
           style={{width: '100%'}}
-          keyboardType="numeric"
-          value={data?.mobile}
+          value={data?.email}
           onChangeText={text => {
             setData({
               ...data,
-              mobile: text,
+              email: text,
             });
           }}
         />
@@ -171,3 +185,4 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+

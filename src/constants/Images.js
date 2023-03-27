@@ -21,4 +21,6 @@ module.exports = {
   delete_user: require("../assets/images/delete_user.png"),
   GoogleMarker: require("../assets/images/GoogleMarker.gif"),
   MarkerGoogle: require("../assets/images/MarkerGoogle.png"),
+  Suport: require("../assets/images/Suport.png"),
+  mailIcon: require("../assets/images/mailIcon.png"),
 };

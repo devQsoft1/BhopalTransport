@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     Modal,
     StyleSheet,
+    Linking,
 } from "react-native";
 import { _fontName } from "../assets/fonts/font";
 import COLORS from "../constants/Colors";
@@ -85,14 +86,17 @@ function ModalContainer({ navigation, render_view_key, content, isVisible, hideM
                         content?.map((item) => (
 
 
-                            <View key={item?.id} style={{ flexDirection: "row", alignSelf: "flex-start", alignItems: "center" }}>
+                            <TouchableOpacity key={item?.contactID} style={{ flexDirection: "row", alignSelf: "flex-start", alignItems: "center" }}
+                            onPress={()=>Linking.openURL(`tel:${item?.contact}`)}
+
+                            >
 
                                 <Image
                                     source={Phone_icon}
                                 // style={{ alignSelf: "center" }}
                                 />
                                 <CustomText
-                                    text={item?.number}
+                                    text={item?.contact}
                                     style={{
                                         color: COLORS.DARKGRAY,
                                         fontSize: 20,
@@ -101,7 +105,7 @@ function ModalContainer({ navigation, render_view_key, content, isVisible, hideM
                                     }}
                                     font={_fontName.InterBold_700}
                                 />
-                            </View>
+                            </TouchableOpacity>
 
 
                         ))

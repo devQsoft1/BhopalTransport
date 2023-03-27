@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'https://techramindra.com/bhopaltransport/appservice/process'
+const BASE_URL = 'https://bhopaltransport.in/appservice/process'
 
 export const getDataFromServer = async () => {
 
@@ -85,7 +85,7 @@ export const postFormDataToServer = async ({ currentUser, data, key, end_point, 
                 console.log(` error :==> api resposense for  key : ${key}, end point : ${end_point}  `, response.data)
                 console.log('                                          ')
 
-
+               
                 call_back({
                     status: 'error',
                     error: response?.data?.message,
