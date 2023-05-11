@@ -24,7 +24,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 //---------- login component
 
-const VerifyOtp = ({navigation,route}) => {
+const VerifyOtp = ({navigation, route}) => {
   //---------- state, veriable, context and hooks
   const [ConfirmPassword, setConfirmPassword] = React.useState();
 
@@ -44,7 +44,7 @@ const VerifyOtp = ({navigation,route}) => {
     getDataFromAsyncStorage,
     setCurrentUser,
   } = ContextHelper();
-console.log("++++",route?.params);
+  console.log('++++', route?.params);
   const [data, setData] = React.useState({
     otp: '',
     password: '',
@@ -57,12 +57,11 @@ console.log("++++",route?.params);
       setLoading(false);
       showMessage({
         message: 'Congratulation! Your Password successfully Change!',
-        style: { backgroundColor: '#42AEEC' }
-    });
+        style: {backgroundColor: '#42AEEC'},
+      });
       navigation.replace('Login');
-      
-      removeDataFromAppState({key: 'verify_otp_pocket'});
 
+      removeDataFromAppState({key: 'verify_otp_pocket'});
     }
   }, [appStateObject?.verify_otp_pocket]);
 
@@ -82,7 +81,7 @@ console.log("++++",route?.params);
         end_point: api_end_point_constants.verify_otp,
         data: {
           ...data,
-          email:route?.params
+          email: route?.params,
         },
       });
     } else {
@@ -136,6 +135,7 @@ console.log("++++",route?.params);
           }}
         />
         <TextField
+          secureTextEntry={true}
           style={{marginBottom: 15}}
           placeholder="Enter Your Password"
           onChangeText={text => {
@@ -149,7 +149,7 @@ console.log("++++",route?.params);
         <TextField
           placeholder="Enter Your confirm Password"
           onChangeText={text => {
-            setConfirmPassword(text)
+            setConfirmPassword(text);
           }}
         />
         <CustomButton

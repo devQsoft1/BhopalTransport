@@ -76,16 +76,16 @@ const SignUp = ({navigation, route}) => {
 
   const handleSignup = () => {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-   
+
     if (data?.email && data?.password && ConfirmPassword) {
-        if (!flagCheck) {
-            // show error
-            showMessage({
-              message: 'Please accept terms and conditoins!',
-              type: 'danger',
-            });
-            return;
-          }
+      if (!flagCheck) {
+        // show error
+        showMessage({
+          message: 'Please accept terms and conditoins!',
+          type: 'danger',
+        });
+        return;
+      }
       if (reg.test(data?.email) === false) {
         showMessage({
           message: 'Please enter valid email address',
@@ -121,7 +121,7 @@ const SignUp = ({navigation, route}) => {
 
   return (
     <ScrollView style={{flex: 1}}>
-      <HeaderFirst navigation={navigation} isHelp={true}/>
+      <HeaderFirst navigation={navigation} isHelp={true} />
 
       <View style={{flex: 1, marginHorizontal: 33, marginTop: 27}}>
         <CustomText
@@ -153,6 +153,7 @@ const SignUp = ({navigation, route}) => {
           }}
         />
         <TextField
+          secureTextEntry={true}
           style={{marginBottom: 15}}
           placeholder="Enter Your Password"
           onChangeText={text => {
@@ -163,6 +164,7 @@ const SignUp = ({navigation, route}) => {
           }}
         />
         <TextField
+          secureTextEntry={true}
           placeholder="Enter Your confirm Password"
           onChangeText={text => {
             setConfirmPassword(text);
@@ -190,8 +192,7 @@ const SignUp = ({navigation, route}) => {
                 }}
                 onPress={() => {
                   setFlag(!flagCheck);
-                }}>
-                </TouchableOpacity>
+                }}></TouchableOpacity>
             )}
           </TouchableOpacity>
 

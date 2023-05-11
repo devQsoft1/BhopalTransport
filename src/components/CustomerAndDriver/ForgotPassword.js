@@ -16,14 +16,13 @@ import TextField from '../../common/TextField';
 // constants
 import COLORS from '../../constants/Colors';
 import ContextHelper from '../../ContextHooks/ContextHelper';
-import { api_end_point_constants } from '../../Utils/ApiConstants';
-
+import {api_end_point_constants} from '../../Utils/ApiConstants';
 
 //---------- login component
 
 const ForgotPassword = ({navigation}) => {
   //---------- state, veriable, context and hooks
-  const [email,setEmail]=React.useState()
+  const [email, setEmail] = React.useState();
   const {
     setLoading,
     isDarkTheme,
@@ -42,30 +41,33 @@ const ForgotPassword = ({navigation}) => {
   } = ContextHelper();
   React.useEffect(() => {
     // success
-    if (appStateObject?.forgot_password_pocket?.status==='success') {
+    if (appStateObject?.forgot_password_pocket?.status === 'success') {
       setLoading(false);
-           navigation.replace('VerifyOtp',appStateObject?.forgot_password_pocket?.response?.email);
-           removeDataFromAppState({key: 'forgot_password_pocket'});
+      navigation.replace('VerifyOtp', email);
+      removeDataFromAppState({key: 'forgot_password_pocket'});
+      showMessage({
+        message: 'Email Sent Successfully !',
+        style: {backgroundColor: '#42AEEC'},
+      });
     }
   }, [appStateObject?.forgot_password_pocket]);
 
-  const handleSubmit =()=>{
-    if(email){
+  const handleSubmit = () => {
+    if (email) {
       postData({
         key: 'forgot_password_pocket',
         end_point: api_end_point_constants.forgot_password,
         data: {
-          email:email
+          email: email,
         },
       });
-    }else{
+    } else {
       showMessage({
         message: 'Please enter email address',
         type: 'danger',
       });
     }
-
-  }
+  };
 
   return (
     <ScrollView style={{flex: 1}}>
@@ -107,7 +109,7 @@ const ForgotPassword = ({navigation}) => {
         <CustomButton
           style={{marginTop: 80}}
           onPress={() => {
-            handleSubmit()
+            handleSubmit();
           }}
           title={'Submit'}
         />

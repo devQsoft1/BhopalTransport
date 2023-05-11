@@ -1,19 +1,26 @@
 //---------- imports
 
 // react
-import React, { useEffect, useState, createContext } from "react";
-import { StyleSheet, ScrollView, View, Text, useColorScheme, Keyboard } from "react-native";
+import React, {useEffect, useState, createContext} from 'react';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  useColorScheme,
+  Keyboard,
+} from 'react-native';
 
 // third party lib
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { showMessage, hideMessage } from "react-native-flash-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {showMessage, hideMessage} from 'react-native-flash-message';
 import Geolocation from '@react-native-community/geolocation';
 
 // api call
-import { postDataToServer, postFormDataToServer } from '../Utils/Axios'
+import {postDataToServer, postFormDataToServer} from '../Utils/Axios';
 
 // constants helper
-import { errors } from "../constants/ErrorConstants";
+import {errors} from '../constants/ErrorConstants';
 
 //---------- context
 
@@ -21,290 +28,283 @@ const AppContext = createContext();
 
 //---------- main app / component
 
-const GlobalContextProvide = (props) => {
+const GlobalContextProvide = props => {
+  //---------- state, veriables and hooks
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [theme, setTheme] = useState({
+    backgroundColor: '#fff',
+    color: '#000',
+  });
+  const [appStateObject, setAppStateObject] = useState({});
+  const [appStateArray, setAppStateArray] = useState([]);
+  const [currentUser, setCurrentUser] = useState({});
 
-    //---------- state, veriables and hooks
-    const [isDarkTheme, setIsDarkTheme] = useState(false)
-    const [theme, setTheme] = useState({
-        backgroundColor: '#fff',
-        color: '#000'
-    })
-    const [appStateObject, setAppStateObject] = useState({})
-    const [appStateArray, setAppStateArray] = useState([])
-    const [currentUser, setCurrentUser] = useState({})
+  const [currentLocation, setCurrentLocation] = useState({});
 
-    const [currentLocation, setCurrentLocation] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [keyboardStatus, setKeyboardStatus] = React.useState(undefined);
 
-    const [loading, setLoading] = useState(false);
-    const [keyboardStatus, setKeyboardStatus] = React.useState(undefined);
+  //---------- life cycle
 
-    //---------- life cycle
+  React.useEffect(() => {
+    const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardStatus('Keyboard Shown');
+    });
+    const hideSubscription = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardStatus('Keyboard Hidden');
+    });
 
-    React.useEffect(() => {
+    getCurrentLocation();
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
-        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-            setKeyboardStatus("Keyboard Shown");
-        });
-        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-            setKeyboardStatus("Keyboard Hidden");
-        });
+  const getCurrentLocation = async () => {
+    await Geolocation.getCurrentPosition(info => setCurrentLocation(info));
+  };
 
-        getCurrentLocation()
-        return () => {
-            showSubscription.remove();
-            hideSubscription.remove();
+  //---------------------------------- Axios Api cal ----------------------------------------//
+  const postData = ({
+    data,
+    key,
+    end_point,
+    params = {},
+    is_force_request = false,
+  }) => {
+    if (!loading || is_force_request) {
+      setLoading(true);
+
+      console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>');
+      console.log('POST DATA TO SERVER(>>>>>>>>> >>>>>>>>>>>>>>)');
+      console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>');
+
+      postFormDataToServer({
+        currentUser,
+        data,
+        key,
+        end_point,
+        call_back: postDataCallBack,
+      });
+    }
+  };
+  const postDataCallBack = response => {
+    // veriable
+    let key = response?.key;
+    let data;
+
+    console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>');
+    console.log('-=-=-= call back after server response -----', response);
+    console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>');
+
+    // success
+    if (response.status === 'success') {
+      if (key === 'login_pocket') {
+        // check patron or business owner for success response from server and check from local give by : roleselectionscreen
+        if (
+          (currentUser?.user_type === 'driver' &&
+            response?.response?.role === '1') ||
+          response?.response?.role === 1 ||
+          (currentUser?.user_type === 'customer' &&
+            response?.response?.role === '0') ||
+          response?.response?.role === 0
+        ) {
+          data = {
+            response: response.response,
+          };
+        } else {
+          // set global loading
+          setLoading(false);
+
+          // show error
+          showMessage({
+            message: 'User is not registered',
+            type: 'danger',
+          });
+        }
+      } else {
+        console.log('callback Responce -=-=-=-=-=--', response);
+        data = {
+          response: response?.response,
+          status: response?.status,
         };
-    }, []);
+      }
+      // error
+    } else {
+      data = {
+        error: response?.error,
+      };
 
-    const getCurrentLocation = async () => {
-
-        await Geolocation.getCurrentPosition(info => setCurrentLocation(info));
+      setLoading(false);
+      if (response?.error === 'No booking Found !') {
+        return;
+      }
+      // show error
+      showMessage({
+        message: response?.error?.toString() || 'server error',
+        type: 'danger',
+      });
     }
 
-    //---------------------------------- Axios Api cal ----------------------------------------//
-    const postData = ({
-        data, key, end_point, params = {}, is_force_request = false
-    }) => {
+    storeDataInAppState({key, data});
+  };
 
-        if (!loading || is_force_request) {
+  //------------------------------------- change theme --------------------------------------//
 
-            setLoading(true);
+  //---------- user's action
 
-            console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
-            console.log("POST DATA TO SERVER(>>>>>>>>> >>>>>>>>>>>>>>)");
-            console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
-
-            postFormDataToServer({
-                currentUser, data, key, end_point, call_back: postDataCallBack
-            })
-        }
+  // change theme
+  const changeTheme = () => {
+    if (isDarkTheme) {
+      setIsDarkTheme(false);
+      setTheme({
+        backgroundColor: '#fff',
+        color: '#000',
+      });
+      storeDataInAsyncStorage({
+        key: 'current_theme',
+        value: {
+          isDarkTheme: false,
+          backgroundColor: '#fff',
+          color: '000',
+        },
+      });
+    } else {
+      setIsDarkTheme(true);
+      setTheme({
+        backgroundColor: '#000',
+        color: '#fff',
+      });
+      storeDataInAsyncStorage({
+        key: 'current_theme',
+        value: {
+          isDarkTheme: true,
+          backgroundColor: '#000',
+          color: 'fff',
+        },
+      });
     }
-    const postDataCallBack = (response) => {
+  };
 
-        // veriable
-        let key = response?.key
-        let data
+  //----------------------------------- Store data in state---------------------------------//
 
-        console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log('-=-=-= call back after server response -----',response)
-        console.log('<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>')
+  // store data in state
+  const storeDataInAppState = async ({key, data}) => {
+    // console.log("App state Update :::::::", " key ++>", key, " Data>>>", data);
+    setAppStateObject({
+      ...appStateObject,
+      [key]: data,
+    });
 
-        // success
-        if (response.status === 'success') {
-            if (key === 'login_pocket') {
+    // set global loading
+    setLoading(false);
 
-                // check patron or business owner for success response from server and check from local give by : roleselectionscreen
-                if ((currentUser?.user_type === 'driver' &&
-                    response?.response?.role === '1' ||
-                    response?.response?.role === 1) ||
+    if (data?.response?.TOKEN) {
+      if (
+        key === 'signup_pocket' ||
+        key === 'login_pocket' ||
+        key === 'Business_signup_pocket' ||
+        key === 'update_profile_driver' ||
+        key === 'update_profile'
+      ) {
+        let user_type =
+          data.response.role === '0' || data.response.role === 0
+            ? 'customer'
+            : data.response.role === '1' || data.response.role === 1
+            ? 'driver'
+            : 'none';
 
-                    (currentUser?.user_type === 'customer' &&
-                        response?.response?.role === '0' ||
-                        response?.response?.role === 0)) {
-
-                    data = {
-                        response: response.response
-                    }
-                } else {
-
-                    // set global loading 
-                    setLoading(false);
-
-                    // show error
-                    showMessage({
-                        message: "User is not registered",
-                        type: 'danger',
-                    });
-                }
-            } else {
-                console.log("callback Responce -=-=-=-=-=--", response);
-                data = {
-                    response: response?.response,
-                    status: response?.status
-                }
-
-            }
-            // error
-        } else {
-
-            data = {
-                error: response?.error
-            }
-
-            setLoading(false);
-            if(response?.error=== 'No booking Found !')
-{
-    return;
-}
-            // show error
-            showMessage({
-                message: response?.error?.toString() || 'server error',
-                type: 'danger',
-            });
-
-        }
-
-        storeDataInAppState({ key, data })
+        await setCurrentUser({...data.response, user_type});
+        await storeDataInAsyncStorage({
+          key: 'current_user',
+          value: {...data.response, user_type},
+        });
+      }
     }
+  };
+  // remove data from app state
+  const removeDataFromAppState = ({key}) => {
+    setAppStateObject({
+      ...appStateObject,
+      [key]: {},
+    });
 
-    //------------------------------------- change theme --------------------------------------//
+    setLoading(false);
+  };
 
-    //---------- user's action
+  // remove data from app state
+  const removeAllDataFromAppState = () => {
+    setAppStateObject({});
+  };
 
-    // change theme
-    const changeTheme = () => {
+  //------------------------------ Async Storage ------------------------------------------//
 
-        if (isDarkTheme) {
+  //---------- async storage
 
-            setIsDarkTheme(false)
-            setTheme({
-                backgroundColor: '#fff',
-                color: '#000'
-            })
-            storeDataInAsyncStorage({
-                key: 'current_theme',
-                value: {
-                    isDarkTheme: false,
-                    backgroundColor: '#fff',
-                    color: '000'
-                }
-            })
-        } else {
-
-            setIsDarkTheme(true)
-            setTheme({
-                backgroundColor: '#000',
-                color: '#fff'
-            })
-            storeDataInAsyncStorage({
-                key: 'current_theme',
-                value: {
-                    isDarkTheme: true,
-                    backgroundColor: '#000',
-                    color: 'fff'
-                }
-            })
-        }
+  // store
+  const storeDataInAsyncStorage = async ({key, value}) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(key, jsonValue);
+      return true;
+    } catch (e) {
+      // saving error
+      return false;
     }
+  };
 
+  // get data
+  const getDataFromAsyncStorage = async key => {
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value !== null) {
+        return JSON.parse(value);
+      }
 
-    //----------------------------------- Store data in state---------------------------------//
-
-    // store data in state
-    const storeDataInAppState = async({ key, data }) => {
-        // console.log("App state Update :::::::", " key ++>", key, " Data>>>", data);
-        setAppStateObject({
-            ...appStateObject,
-            [key]: data,
-        })
-
-        // set global loading
-        setLoading(false);
-
-        if (data?.response?.TOKEN) {
-            if (key === 'signup_pocket' || key === 'login_pocket' || key === "Business_signup_pocket"||key === "update_profile_driver" || key==='update_profile') {
-
-                let user_type = (data.response.role === '0' || data.response.role === 0) ? 'customer' :
-
-                    (data.response.role === '1' || data.response.role === 1) ? 'driver' : 'none'
-
-               await setCurrentUser({ ...data.response, user_type });
-               await storeDataInAsyncStorage({ key: 'current_user', value: { ...data.response, user_type } })
-            }
-        }
+      return false;
+    } catch (e) {
+      // error reading value
+      return false;
     }
-    // remove data from app state
-    const removeDataFromAppState = ({ key }) => {
-        setAppStateObject({
-            ...appStateObject,
-            [key]: {},
-        })
+  };
 
-        setLoading(false);
-    }
+  // remove async storage
+  const removeDataFromAsyncStorage = async key => {
+    await AsyncStorage.removeItem(key);
+  };
 
+  //---------- return main view
 
-    // remove data from app state
-    const removeAllDataFromAppState = () => {
+  return (
+    <AppContext.Provider
+      value={{
+        loading,
+        isDarkTheme,
+        theme,
+        appStateObject,
+        appStateArray,
+        currentUser,
+        currentLocation,
+        keyboardStatus,
 
-        setAppStateObject({})
-    }
-
-    //------------------------------ Async Storage ------------------------------------------//
-
-    //---------- async storage
-
-    // store
-    const storeDataInAsyncStorage = async ({ key, value }) => {
-
-        try {
-            const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem(key, jsonValue)
-            return true
-        } catch (e) {
-            // saving error
-            return false
-        }
-    }
-
-    // get data
-    const getDataFromAsyncStorage = async (key) => {
-        try {
-            const value = await AsyncStorage.getItem(key)
-            if (value !== null) {
-
-                return JSON.parse(value)
-            }
-
-            return false
-        } catch (e) {
-
-            // error reading value
-            return false
-        }
-    }
-
-    // remove async storage
-    const removeDataFromAsyncStorage = async (key) => {
-
-        await AsyncStorage.removeItem(key)
-    }
-
-    //---------- return main view
-
-    return (
-        <AppContext.Provider
-            value={{
-                loading,
-                isDarkTheme,
-                theme,
-                appStateObject,
-                appStateArray,
-                currentUser,
-                currentLocation,
-
-                setLoading,
-                postData,
-                changeTheme,
-                storeDataInAppState,
-                removeDataFromAppState,
-                removeAllDataFromAppState,
-                storeDataInAsyncStorage,
-                getDataFromAsyncStorage,
-                removeDataFromAsyncStorage,
-                setCurrentUser,
-            }}
-        >
-
-            {
-                props.children
-            }
-        </AppContext.Provider>
-
-    );
+        setLoading,
+        postData,
+        changeTheme,
+        storeDataInAppState,
+        removeDataFromAppState,
+        removeAllDataFromAppState,
+        storeDataInAsyncStorage,
+        getDataFromAsyncStorage,
+        removeDataFromAsyncStorage,
+        setCurrentUser,
+      }}>
+      {props.children}
+    </AppContext.Provider>
+  );
 };
 
 //---------- export component
 
-export { GlobalContextProvide, AppContext };
+export {GlobalContextProvide, AppContext};
 // export default { GlobalContextProvide, AppContext };

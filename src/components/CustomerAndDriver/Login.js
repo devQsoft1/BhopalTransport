@@ -21,7 +21,7 @@ import COLORS from '../../constants/Colors';
 import {api_end_point_constants} from '../../Utils/ApiConstants';
 import ContextHelper from '../../ContextHooks/ContextHelper';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 
 //---------- login component
 
@@ -58,14 +58,11 @@ const Login = ({navigation}) => {
       setLoading(false);
 
       navigation.replace('DrawerNavigation');
-   
-    
     }
   }, [appStateObject?.login_pocket]);
 
   //--------- user Login
   const handleLogin = () => {
-   
     if (data?.email && data?.email) {
       if (!flagCheck) {
         // show error
@@ -134,6 +131,7 @@ const Login = ({navigation}) => {
           }}
         />
         <TextField
+          secureTextEntry={true}
           placeholder="Enter Your Password"
           onChangeText={text => {
             setData({
@@ -142,14 +140,15 @@ const Login = ({navigation}) => {
             });
           }}
         />
-        <TouchableOpacity style={{alignItems:"flex-end",marginHorizontal:5}} onPress={()=>navigation.navigate('ForgotPassword')}>
+        <TouchableOpacity
+          style={{alignItems: 'flex-end', marginHorizontal: 5}}
+          onPress={() => navigation.navigate('ForgotPassword')}>
           <CustomText
             text="Forgot Password"
             style={{
               fontSize: 15,
               color: '#35120F',
               fontFamily: _fontName.InterBold_700,
-              
             }}
           />
         </TouchableOpacity>
