@@ -2,10 +2,18 @@
 
 // react
 import * as React from 'react';
-import {Image, ScrollView, StyleSheet, View, Text} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  Keyboard,
+  TouchableOpacity,
+} from 'react-native';
 
 // lib
-import MapView, {Marker} from 'react-native-maps';
+import MapView, {Marker, Polyline} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
@@ -21,7 +29,12 @@ import {showMessage} from 'react-native-flash-message';
 
 // constants
 import COLORS from '../constants/Colors';
-import {Maps_icon, Pick_up, MarkerGoogle} from '../constants/Images';
+import {
+  Maps_icon,
+  Pick_up,
+  MarkerGoogle,
+  locationPin,
+} from '../constants/Images';
 
 // components
 import ModalContainer from './ModalContainer';
@@ -36,7 +49,6 @@ import {api_end_point_constants} from '../Utils/ApiConstants';
 const API_KEY = 'AIzaSyDV5QBZYiqzhMFBL-Rme6oeYoepT7ckiiI';
 
 //---------- main componet
-
 const GoogleMaps = ({navigation, route}) => {
   //---------- context, state, and veriables
   const {item} = route?.params;
@@ -50,21 +62,16 @@ const GoogleMaps = ({navigation, route}) => {
 
     removeDataFromAppState,
     postData,
+    getCurrentLocation,
   } = ContextHelper();
+  const mapRef = React.useRef(null);
 
   const [ContactData, setContactData] = React.useState([]);
   const [visible, setVisible] = React.useState(false);
+  const [isSelectCurentLoca, setisSelectCurentLoca] = React.useState(false);
   const [selectedPoint, setSelectedPoint] = React.useState(undefined);
-  const [pickupPoint, setPickUpPoint] = React.useState({
-    // start_lat: 22.725,
-    // start_long: 75.8843969,
-    start_address: 'indore',
-  });
-  const [dropPoint, setDropPoint] = React.useState({
-    // end_lat: 22.693047,
-    // end_long: 75.913519,
-    end_address: 'bhopal',
-  });
+  const [pickupPoint, setPickUpPoint] = React.useState({});
+  const [dropPoint, setDropPoint] = React.useState({});
 
   //---------- life cycles
   React.useEffect(() => {
@@ -76,6 +83,11 @@ const GoogleMaps = ({navigation, route}) => {
   }, [appStateObject?.Contact_data_pocket]);
 
   React.useEffect(() => {
+    setPickUpPoint({
+      start_lat: currentLocation?.coords?.latitude,
+      start_long: currentLocation?.coords?.longitude,
+      start_address: '',
+    });
     postData({
       key: 'Contact_data_pocket',
       end_point: api_end_point_constants.show_contact_details,
@@ -92,8 +104,8 @@ const GoogleMaps = ({navigation, route}) => {
       removeDataFromAppState({key: 'booking_poket'});
     }
   }, [appStateObject?.booking_poket]);
+
   //--------- user Booking
-  console.log('keyboardStatus', keyboardStatus);
   const handleBooking = () => {
     if (pickupPoint?.start_lat && dropPoint?.end_lat) {
       postData({
@@ -114,35 +126,66 @@ const GoogleMaps = ({navigation, route}) => {
       });
     }
   };
-  console.log('-===-currentLocation=-=--', currentLocation);
-  const workPlace = {
-    description: 'Trabalho',
-    geometry: {location: {lat: -29.1166504, lng: -51.1115736}},
-  };
+
+  console.log('start-pick', dropPoint);
   const renderAutoComplete = isPickup => {
     return (
       <GooglePlacesAutocomplete
-        minLength={3}
+        // currentLocationLabel="Current location"
         // currentLocation={true}
-        currentLocationLabel="Current location"
-        predefinedPlaces={[workPlace]}
-        placeholder="Pick Location"
+        minLength={3}
+        placeholder={
+          isSelectCurentLoca && isPickup ? 'Curent Location' : 'Pick Location'
+        }
+        autoFocus={true}
         fetchDetails={true}
         onPress={(data, details = null) => {
-          console.log('data==========', data);
-          console.log('details==========', details);
+          console.log('data==========');
+          console.log('details==========', details.adr_address);
+          if (isPickup) {
+            mapRef.current.animateToRegion(
+              {
+                latitude: details?.geometry?.location?.lat,
+                longitude: details?.geometry?.location?.lng,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              },
+              3 * 1000,
+            );
+            setPickUpPoint({
+              start_lat: details?.geometry?.location?.lat,
+              start_long: details?.geometry?.location?.lng,
+              start_address: details?.formatted_address,
+            });
+          } else {
+            setDropPoint({
+              end_lat: details?.geometry?.location?.lat,
+              end_long: details?.geometry?.location?.lng,
+              end_address: details?.formatted_address,
+            });
+          }
         }}
         onFail={error => console.log(error)}
         onNotFound={() => console.log('no results')}
         query={{
           key: API_KEY,
           language: 'en',
+          components: 'country:in',
         }}
         textInputProps={{
-          placeholderTextColor: '#949292',
+          placeholderTextColor:
+            isSelectCurentLoca && isPickup ? '#000' : '#949292',
         }}
-        // nearbyPlacesAPI="GooglePlacesSearch"
+        nearbyPlacesAPI="GooglePlacesSearch"
         styles={{
+          containerTop: {
+            height: 0,
+            flexDirection: 'row',
+            padding: 25,
+            paddingBottom: 50,
+            marginTop: 20,
+            zIndex: 200,
+          },
           // textInputContainer: {
           //   backgroundColor: '#F5F5F5',
           //   borderRadius: 20,
@@ -164,11 +207,11 @@ const GoogleMaps = ({navigation, route}) => {
           predefinedPlacesDescription: {
             color: 'blue',
           },
-          listView: {
-            // position: 'absolute',
-            // top: 40,
-            // color: 'blue',
-          },
+          // listView: {
+          //   position: 'absolute',
+          //   top: 40,
+          //   color: 'blue',
+          // },
           description: {color: 'black'},
         }}
       />
@@ -182,67 +225,67 @@ const GoogleMaps = ({navigation, route}) => {
           flex: 1,
         }}>
         <MapView
+          ref={mapRef}
           style={{
             width: '100%',
             height: '80%',
           }}
           showsUserLocation={true}
           showsMyLocationButton={true}
+          provider={MapView.PROVIDER_GOOGLE}
           // showsCompass={true}
           initialRegion={{
-            latitude: currentLocation?.coords?.latitude,
-            longitude: currentLocation?.coords?.longitude,
+            latitude: pickupPoint?.start_lat || 22.7249726,
+            longitude: pickupPoint?.start_long || 75.8843731,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
-          }}
-          onRegionChangeComplete={e => {
-            // if (selectedPoint === 'pickup') {
-            console.log('=-=-=-pickup=-==->', e);
-
-            setPickUpPoint({
-              start_lat: e.latitude,
-              start_long: e.longitude,
-              start_address: 'bhopal',
-            });
-            // }
-            // else if (selectedPoint === 'drop') {
-            //   console.log('=-=-=-drop=-==->', e);
-
-            //   setDropPoint({
-            //     end_lat: e.latitude,
-            //     end_long: e.longitude,
-            //     end_address: 'bhopal',
-            //   });
-            // }
-          }}
-          // customMapStyle={mapStyle}
-        >
-          {/* {pickupPoint?.start_lat && pickupPoint?.start_long && ( */}
-          <Marker
-            draggable
-            coordinate={{
-              latitude: currentLocation?.coords?.latitude,
-              longitude: currentLocation?.coords?.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            }}
-            onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
-            title={'Pick up from here'}
-            description={'press maker for current location'}
-          />
-          {/* )} */}
-
+          }}>
+          {pickupPoint?.start_lat && pickupPoint?.start_long && (
+            <Marker
+              draggable
+              coordinate={{
+                latitude: pickupPoint?.start_lat,
+                longitude: pickupPoint?.start_long,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
+              // title={pickupPoint?.start_address || ''}
+              description={pickupPoint?.start_address || ''}
+              // pinColor={'green'}
+            />
+          )}
           {dropPoint?.end_lat && dropPoint?.end_long && (
             <Marker
-              pinColor="blue"
+              draggable
               coordinate={{
                 latitude: dropPoint?.end_lat,
                 longitude: dropPoint?.end_long,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
               }}
-              title={'Droping here'}
-              description={'This is a description of the marker'}
-            />
+              // title={dropPoint?.end_address}
+              description={dropPoint?.end_address}
+              pinColor={'green'}></Marker>
           )}
+          {dropPoint?.end_lat &&
+            dropPoint?.end_long &&
+            pickupPoint?.start_lat &&
+            pickupPoint?.start_long && (
+              <MapViewDirections
+                origin={{
+                  latitude: pickupPoint?.start_lat,
+                  longitude: pickupPoint?.start_long,
+                }}
+                destination={{
+                  latitude: dropPoint?.end_lat,
+                  longitude: dropPoint?.end_long,
+                }}
+                apikey={API_KEY}
+                strokeWidth={5}
+                strokeColor={COLORS.DARKGRAY}
+              />
+            )}
         </MapView>
       </View>
     );
@@ -284,6 +327,7 @@ const GoogleMaps = ({navigation, route}) => {
                 }
           }>
           {renderAutoComplete(true)}
+
           {renderAutoComplete(false)}
         </View>
         {/* {renderAutoComplete()} */}

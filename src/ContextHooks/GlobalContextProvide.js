@@ -62,7 +62,9 @@ const GlobalContextProvide = props => {
   }, []);
 
   const getCurrentLocation = async () => {
-    await Geolocation.getCurrentPosition(info => setCurrentLocation(info));
+    await Geolocation.getCurrentPosition(info => {
+      setCurrentLocation(info);
+    });
   };
 
   //---------------------------------- Axios Api cal ----------------------------------------//
@@ -298,6 +300,7 @@ const GlobalContextProvide = props => {
         getDataFromAsyncStorage,
         removeDataFromAsyncStorage,
         setCurrentUser,
+        getCurrentLocation,
       }}>
       {props.children}
     </AppContext.Provider>

@@ -28,7 +28,7 @@ const Stack = createStackNavigator();
 export const StackNavigation = () => {
   //---------- state, veriable, context and hooks
 
-  const {loading ,currentUser} = ContextHelper();
+  const {loading, currentUser} = ContextHelper();
 
   //---------- return main view
   return (
@@ -58,29 +58,27 @@ export const StackNavigation = () => {
           name="SplashScreen"
           component={SplashScreen}
         />
-{
-  !currentUser?.TOKEN&&
-  <>
-        <Stack.Screen
-          options={{
-            headerShown: false,
-            cardStyle: {backgroundColor: '#FFFFFF'},
-          }}
-          name="RoleSelection"
-          component={RoleSelection}
-        />
+        {!currentUser?.TOKEN && (
+          <>
+            <Stack.Screen
+              options={{
+                headerShown: false,
+                cardStyle: {backgroundColor: '#FFFFFF'},
+              }}
+              name="RoleSelection"
+              component={RoleSelection}
+            />
 
-        <Stack.Screen
-          options={{
-            headerShown: false,
-            cardStyle: {backgroundColor: '#FFFFFF'},
-          }}
-          name="Login"
-          component={Login}
-        />
-  </>
-
-}
+            <Stack.Screen
+              options={{
+                headerShown: false,
+                cardStyle: {backgroundColor: '#FFFFFF'},
+              }}
+              name="Login"
+              component={Login}
+            />
+          </>
+        )}
 
         <Stack.Screen
           options={{
@@ -100,7 +98,7 @@ export const StackNavigation = () => {
           component={ForgotPassword}
         />
 
-<Stack.Screen
+        <Stack.Screen
           options={{
             headerShown: false,
             cardStyle: {backgroundColor: '#FFFFFF'},

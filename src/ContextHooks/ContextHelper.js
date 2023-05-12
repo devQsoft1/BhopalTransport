@@ -29,6 +29,7 @@ const ContextHelper = () => {
     getDataFromAsyncStorage,
     removeDataFromAsyncStorage,
     setCurrentUser,
+    getCurrentLocation,
   } = useContext(AppContext);
 
   //---------- main app / component
@@ -53,6 +54,7 @@ const ContextHelper = () => {
     getDataFromAsyncStorage,
     removeDataFromAsyncStorage,
     setCurrentUser,
+    getCurrentLocation,
   };
 };
 

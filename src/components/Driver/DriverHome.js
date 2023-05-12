@@ -37,7 +37,7 @@ const DriverHome = ({navigation}) => {
     setIsRefreshing(true);
     getData();
     setLoading(false);
-    wait(1000).then(() => {
+    wait(800).then(() => {
       setIsRefreshing(false);
     });
   }, []);

@@ -28,9 +28,10 @@ import ContextHelper from '../../ContextHooks/ContextHelper';
 import {api_end_point_constants} from '../../Utils/ApiConstants';
 import ModalContainer from '../../common/ModalContainer';
 import TextField from '../../common/TextField';
+import COLORS from '../../constants/Colors';
 
 //--------- constant api key for map
-const API_KEY = 'AIzaSyCdi6CPk7xVX0AKavFQtXHMcBYBCCMaJHc';
+const API_KEY = 'AIzaSyDV5QBZYiqzhMFBL-Rme6oeYoepT7ckiiI';
 
 //---------- main componet
 
@@ -97,77 +98,6 @@ const StartMaps = ({navigation, route}) => {
     });
   };
 
-  const renderAutoComplete = () => {
-    return (
-      <GooglePlacesAutocomplete
-        placeholder="Pick Location"
-        fetchDetails={true}
-        onPress={(data, details = null) => console.log(data, details)}
-        onFail={error => console.log(error)}
-        onNotFound={() => console.log('no results')}
-        predefinedPlaces={[
-          {
-            type: 'favorite',
-            description: 'Dominos Pizza',
-            geometry: {location: {lat: 48.8152937, lng: 2.4597668}},
-          },
-          {
-            type: 'favorite',
-            description: 'Chicken Republic',
-            geometry: {location: {lat: 48.8496818, lng: 2.2940881}},
-          },
-        ]}
-        listEmptyComponent={() => (
-          <View style={{flex: 1}}>
-            <Text>No results were found</Text>
-          </View>
-        )}
-        query={{
-          key: API_KEY,
-          language: 'en',
-        }}
-        textInputProps={{
-          placeholderTextColor: '#949292',
-        }}
-        styles={{
-          textInputContainer: {
-            backgroundColor: '#F5F5F5',
-            borderRadius: 20,
-            shadowColor: '#000',
-            shadowOffset: {width: 1, height: 1},
-            shadowOpacity: 0.4,
-            shadowRadius: 3,
-            elevation: 5,
-          },
-          textInput: {
-            backgroundColor: '#F5F5F5',
-            borderRadius: 20,
-
-            color: '#5d5d5d',
-            fontSize: 16,
-            height: 38,
-            paddingBottom: -12,
-          },
-          predefinedPlacesDescription: {
-            color: '#000',
-          },
-          // listView: {
-          //     // position: 'absolute',
-          //     // top: 40,
-          // },
-          row: {
-            // backgroundColor: '#F5F5F5',
-            borderRadius: 20,
-            borderWidth: 1,
-            borderColor: '#F5F5F5',
-            zIndex: 1000,
-            // elevation: 10
-          },
-        }}
-      />
-    );
-  };
-
   const renderGoogleMap = () => {
     return (
       <View
@@ -179,35 +109,65 @@ const StartMaps = ({navigation, route}) => {
             width: '100%',
             height: '80%',
           }}
+          currentLocation={true}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
           initialRegion={{
-            latitude: currentLocation?.coords
-              ? currentLocation?.coords?.latitude
-              : 37.4220936,
-            longitude: currentLocation?.coords
-              ? currentLocation?.coords?.longitude
-              : -122.083922,
+            latitude: parseFloat(item?.end_lat) || 37.4220936,
+            longitude: parseFloat(item?.end_long) || -122.083922,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
+          }}
+          query={{
+            key: API_KEY,
+            language: 'en',
+            components: 'country:in',
           }}>
-          <Marker
-            coordinate={{
-              latitude: parseFloat(item?.start_lat),
-              longitude: parseFloat(item?.start_long),
-            }}
-            onDragEnd={e => alert(JSON.stringify(e.nativeEvent.coordinate))}
-            title={'Pick up from here'}
-            description={'This is a description of the marker'}
-          />
-
-          <Marker
-            pinColor="blue"
-            coordinate={{
-              latitude: parseFloat(item?.end_lat),
-              longitude: parseFloat(item?.end_long),
-            }}
-            title={'Droping here'}
-            description={'This is a description of the marker'}
-          />
+          {item?.start_lat && item?.start_long && (
+            <Marker
+              draggable
+              coordinate={{
+                latitude: parseFloat(item?.start_lat),
+                longitude: parseFloat(item?.start_long),
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              title={item?.start_address || ''}
+              // description={item?.start_address || ''}
+              // pinColor={'green'}
+            />
+          )}
+          {item?.end_lat && item?.end_long && (
+            <Marker
+              draggable
+              coordinate={{
+                latitude: parseFloat(item?.end_lat),
+                longitude: parseFloat(item?.end_long),
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              title={item?.end_address}
+              // description={item?.end_address}
+              pinColor={'green'}></Marker>
+          )}
+          {item?.end_lat &&
+            item?.end_long &&
+            item?.start_lat &&
+            item?.start_long && (
+              <MapViewDirections
+                origin={{
+                  latitude: item?.start_lat,
+                  longitude: item?.start_long,
+                }}
+                destination={{
+                  latitude: item?.end_lat,
+                  longitude: item?.end_long,
+                }}
+                apikey={API_KEY}
+                strokeWidth={5}
+                strokeColor={COLORS.DARKGRAY}
+              />
+            )}
         </MapView>
       </View>
     );
